@@ -12,6 +12,7 @@ import org.langbein.michael.soundboard.scenes.SceneLogic;
 
 public class RenderThread extends Thread {
 
+    private final long frameTime = 17;   // How long (in millisec) a frame may take
     private SceneLogic sceneLogic;
     private Context context;
     private SurfaceHolder surfaceHolder;
@@ -26,10 +27,35 @@ public class RenderThread extends Thread {
 
     @Override
     public void run() {
+        long updateDuration = 0;
+        long sleepDuration = 0;
+
         while(running) {
+
+            // Step 0 : how long did the loop take?
+            long beforeUpdateRender = System.nanoTime();
+            long delta = sleepDuration + updateDuration;
+
+            // Step 1 : scene logic
+            sceneLogic.update(delta);
+
+            // Step 2: scene rendering
             Canvas canvas = surfaceHolder.lockCanvas();
-            sceneLogic.draw(canvas);
-            surfaceHolder.unlockCanvasAndPost(canvas);
+            if(canvas != null) {
+                sceneLogic.draw(canvas);
+                surfaceHolder.unlockCanvasAndPost(canvas);
+            }
+
+            // Step 3: sleep for remainder of frameTime
+            updateDuration = (System.nanoTime() - beforeUpdateRender) / 1000000L;
+            sleepDuration = Math.max(2, frameTime - updateDuration);
+            try{
+                Thread.sleep(sleepDuration);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
         }
     }
 

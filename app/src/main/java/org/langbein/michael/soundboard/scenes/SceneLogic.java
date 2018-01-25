@@ -9,7 +9,7 @@ public interface SceneLogic {
 
     public boolean onTouch(MotionEvent event);
 
-    public void update();
+    public void update(long delta);
 
     public void draw(Canvas canvas);
 }

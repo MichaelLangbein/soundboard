@@ -30,8 +30,9 @@ public class BoardScene implements SceneLogic {
     }
 
     @Override
-    public void update() {
-
+    public void update(long delta) {
+        lilRect.top -= delta * 1;
+        lilRect.bottom -= delta * 1;
     }
 
     @Override
