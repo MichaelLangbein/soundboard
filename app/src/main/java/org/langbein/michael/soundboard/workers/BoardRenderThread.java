@@ -1,32 +1,46 @@
-package org.langbein.michael.soundboard;
+package org.langbein.michael.soundboard.workers;
 
-
-import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
 import org.langbein.michael.soundboard.scenes.SceneLogic;
+import org.langbein.michael.soundboard.views.BoardView;
 
-public class RenderThread extends Thread {
+/**
+ * This render thread takes
+ *   - a surface view, to get the canvas and to be notified of touch events
+ *   - a scene logic, that determines exactly *what* is supposed to be drawn onto the surface
+ */
 
-    private final long frameTime = 17;   // How long (in millisec) a frame may take
-    private SceneLogic sceneLogic;
-    private Context context;
+public class BoardRenderThread extends Thread {
+
+    private BoardView boardView;
     private SurfaceHolder surfaceHolder;
+    private SceneLogic scene;
     private boolean running;
+    private long frameTime;
 
-    public RenderThread(Context context, SurfaceHolder surfaceHolder, SceneLogic sceneLogic) {
-        this.context = context;
-        this.surfaceHolder = surfaceHolder;
-        this.running = true;
-        this.sceneLogic = sceneLogic;
+    public BoardRenderThread(BoardView bv, SceneLogic sc) {
+        boardView = bv;
+        scene = sc;
+        surfaceHolder = bv.getHolder();
+        running = true;
+        frameTime = 17;
+    }
+
+
+    public void enableRendering() {
+        running = true;
+    }
+
+    public void disableRendering() {
+        running = false;
     }
 
     @Override
     public void run() {
+
         long updateDuration = 0;
         long sleepDuration = 0;
 
@@ -37,12 +51,12 @@ public class RenderThread extends Thread {
             long delta = sleepDuration + updateDuration;
 
             // Step 1 : scene logic
-            sceneLogic.update(delta);
+            scene.update(delta);
 
             // Step 2: scene rendering
             Canvas canvas = surfaceHolder.lockCanvas();
             if(canvas != null) {
-                sceneLogic.draw(canvas);
+                scene.draw(canvas);
                 surfaceHolder.unlockCanvasAndPost(canvas);
             }
 
@@ -57,13 +71,13 @@ public class RenderThread extends Thread {
 
 
         }
+
     }
 
-    public SceneLogic getLogic() {
-        return sceneLogic;
+    public boolean onTouchEvent(MotionEvent event) {
+        return scene.onTouch(event);
     }
 
-    public void setInactive() {
-        running = false;
-    }
+
+
 }
