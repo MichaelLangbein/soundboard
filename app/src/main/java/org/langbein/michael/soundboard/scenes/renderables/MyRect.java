@@ -14,14 +14,10 @@ public class MyRect implements Renderable, Touchable {
 
     private Paint painter;
     private Rect rect;
-    private int posX;
-    private int posY;
     private int width;
     private int height;
 
     public MyRect(int posX, int posY, int width, int height) {
-        this.posX = posX;
-        this.posY = posY;
         this.width = width;
         this.height = height;
         rect = new Rect(posX, posY, width, height);
