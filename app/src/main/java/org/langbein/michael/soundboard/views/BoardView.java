@@ -9,7 +9,14 @@ import org.langbein.michael.soundboard.scenes.SceneLogic;
 import org.langbein.michael.soundboard.workers.BoardRenderThread;
 
 
-
+/**
+ * A surfaceView is a special kind of view
+ * that can expose a surface-holder, and with that a surface, and with that a canvas.
+ * This is important, because the SurfaceView typically creates a custom thread that it exposes
+ * the canvas to.
+ * Typically, the SurfaceView is the owner of the thread, so that it can call the threads methods
+ * when a TouchEvent is registered.
+ */
 public class BoardView extends SurfaceView implements SurfaceHolder.Callback {
 
     private SceneLogic sl;
