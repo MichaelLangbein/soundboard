@@ -1,6 +1,9 @@
 package org.langbein.michael.soundboard.scenes.renderables;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.view.MotionEvent;
 
 /**
@@ -9,8 +12,10 @@ import android.view.MotionEvent;
 
 public class Key implements Renderable, Touchable {
 
-    public Key(int posX, int posY, int len, float freq) {
+    private Hexagon hex;
 
+    public Key(int posX, int posY, int len, float freq) {
+        hex = new Hexagon(posX, posY, len);
     }
 
     @Override
@@ -20,7 +25,7 @@ public class Key implements Renderable, Touchable {
 
     @Override
     public void draw(Canvas canvas) {
-
+        hex.draw(canvas);
     }
 
     @Override
