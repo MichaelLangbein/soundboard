@@ -28,13 +28,13 @@ public class Hexagon {
 
         path = new Path();
         path.setFillType(Path.FillType.EVEN_ODD);
-        path.moveTo(xPos, xPos - len); // top
+        path.moveTo(xPos, yPos - len); // top
         path.lineTo( (float) (xPos + len * Math.cos(Math.PI / 6.0)), (float) (yPos - len * Math.sin(Math.PI / 6.0)) ); // right upper
         path.lineTo( (float) (xPos + len * Math.cos(Math.PI / 6.0)), (float) (yPos + len * Math.sin(Math.PI / 6.0)) ); // right lower
         path.lineTo(xPos, yPos + len); // bottom
         path.lineTo( (float) (xPos - len * Math.cos(Math.PI / 6.0)), (float) (yPos + len * Math.sin(Math.PI / 6.0)) ); // left lower
         path.lineTo( (float) (xPos - len * Math.cos(Math.PI / 6.0)), (float) (yPos - len * Math.sin(Math.PI / 6.0)) ); // left upper
-        path.lineTo(xPos, xPos - len); // top
+        path.lineTo(xPos, yPos - len); // top
 
     }
 

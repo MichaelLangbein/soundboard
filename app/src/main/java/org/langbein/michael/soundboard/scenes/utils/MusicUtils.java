@@ -1,4 +1,4 @@
-package org.langbein.michael.soundboard.scenes;
+package org.langbein.michael.soundboard.scenes.utils;
 
 /**
  * Created by michael on 28.01.18.

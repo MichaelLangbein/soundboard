@@ -31,4 +31,8 @@ public class Key implements Renderable, Touchable {
     public void onTouch(MotionEvent event) {
 
     }
+
+    public void setFillColor(int a, int r, int  g, int b){
+        hex.setFillColor(a, r, g, b);
+    }
 }

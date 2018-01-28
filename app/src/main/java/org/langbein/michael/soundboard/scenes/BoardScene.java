@@ -3,24 +3,21 @@ package org.langbein.michael.soundboard.scenes;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 
-import org.langbein.michael.soundboard.scenes.renderables.Key;
-
-import java.util.ArrayList;
+import org.langbein.michael.soundboard.scenes.renderables.Board;
 
 
 public class BoardScene implements SceneLogic {
 
 
-    private final int nrKeys = 12;
     private Board board;
 
     public BoardScene() {
-        board = new Board(12, 440);
+        board = new Board(220, 60);
     }
 
     @Override
     public void update(long delta) {
-        board.update(long delta);
+        board.update(delta);
     }
 
     @Override
