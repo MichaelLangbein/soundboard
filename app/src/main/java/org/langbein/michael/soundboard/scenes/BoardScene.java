@@ -12,7 +12,7 @@ public class BoardScene implements SceneLogic {
     private Board board;
 
     public BoardScene() {
-        board = new Board(220, 60);
+        board = new Board(220, 50);
     }
 
     @Override

@@ -4,18 +4,26 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.view.MotionEvent;
+
+import org.langbein.michael.soundboard.scenes.utils.Vec2;
 
 /**
  * Created by michael on 28.01.18.
  */
 
-public class Hexagon {
+public class Hexagon implements TwoDimObject {
 
     private Paint outlinePaint;
     private Paint fillPaint;
     private Path path;
+    private Vec2<Integer> center;
+    private int sideLength;
 
     public Hexagon(int xPos, int yPos, int len) {
+
+        center = new Vec2<Integer>(xPos, yPos);
+        sideLength = len;
 
         outlinePaint = new Paint();
         outlinePaint.setColor(Color.BLUE);
@@ -41,6 +49,21 @@ public class Hexagon {
     public void draw(Canvas canvas) {
         canvas.drawPath(path, fillPaint);
         //canvas.drawPath(path, outlinePaint);
+    }
+
+    public boolean isInsideBounds(MotionEvent me) {
+        // @TODO: das geht genauer!
+        boolean inside = false;
+
+        float x = me.getX();
+        float y = me.getY();
+        double dist = Math.sqrt(Math.pow((x - center.x), 2) + Math.pow((y - center.y), 2));
+
+        if(dist < 2*sideLength){
+            inside = true;
+        }
+
+        return inside;
     }
 
     public void setOutlineColor(int a, int r, int g, int b){

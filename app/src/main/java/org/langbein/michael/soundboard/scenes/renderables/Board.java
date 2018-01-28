@@ -41,8 +41,8 @@ public class Board {
         for(int k = 0; k < nKeys; k++) {
             Vec2<Integer> pos = getPos(k);
             float freq = MusicUtils.getNthTone(baseFreq, k);
-            Key key = new Key(pos.x, pos.y, l, freq);
-            key.setFillColor(255, (int)(255 * random()), (int)(255 * random()), (int)(255 * random()));
+            Key key = new Key(pos.x, pos.y, l, freq, k);
+            key.setFillColor(123, (int)(255 * random()), (int)(255 * random()), (int)(255 * random()));
             keys[k] = key;
         }
     }
@@ -51,6 +51,9 @@ public class Board {
     }
 
     public boolean onTouch(MotionEvent event) {
+        for(int k = 0; k < nKeys; k++) {
+            keys[k].onTouch(event);
+        }
         return true;
     }
 
@@ -66,11 +69,11 @@ public class Board {
         for(int i = 0; i < nr; i++) {
             gsm.oneStepFurther();
         }
-        Vec2<Integer> indxPos = gsm.getCurrentPos();
+        Vec2<Integer> indxPos = gsm.getCurrentPos(); // (row -> y, col -> x)
 
-        int x = height - (7 - indxPos.x) * deltaX;
-        int y = width - (14 - indxPos.y) * deltaY;
+        int x = width - (14 - indxPos.y) * deltaX;
+        int y = height - (indxPos.x) * deltaY;
 
-        return new Vec2<Integer>(x, y);
+        return new Vec2<Integer>(x + 2*l, y + 4*l);
     }
 }

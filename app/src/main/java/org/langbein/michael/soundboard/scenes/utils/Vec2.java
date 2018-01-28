@@ -11,4 +11,8 @@ public class Vec2<T> {
         this.x = x;
         this.y = y;
     }
+
+//    public float distance(Vec2<T> other) {
+//        return Math.sqrt( Math.pow(x -  other.x, 2) + Math.pow(y - other.y, 2) );
+//    }
 }
