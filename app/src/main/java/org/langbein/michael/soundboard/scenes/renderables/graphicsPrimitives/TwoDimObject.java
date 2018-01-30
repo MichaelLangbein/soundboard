@@ -1,4 +1,4 @@
-package org.langbein.michael.soundboard.scenes.renderables;
+package org.langbein.michael.soundboard.scenes.renderables.graphicsPrimitives;
 
 import android.graphics.Canvas;
 import android.view.MotionEvent;

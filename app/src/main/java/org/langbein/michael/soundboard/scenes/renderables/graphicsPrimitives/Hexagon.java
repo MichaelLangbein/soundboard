@@ -1,4 +1,4 @@
-package org.langbein.michael.soundboard.scenes.renderables;
+package org.langbein.michael.soundboard.scenes.renderables.graphicsPrimitives;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -59,7 +59,7 @@ public class Hexagon implements TwoDimObject {
         float y = me.getY();
         double dist = Math.sqrt(Math.pow((x - center.x), 2) + Math.pow((y - center.y), 2));
 
-        if(dist < 2*sideLength){
+        if(dist < 1.5*sideLength){
             inside = true;
         }
 
