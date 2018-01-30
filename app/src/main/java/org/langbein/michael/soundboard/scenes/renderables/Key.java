@@ -45,7 +45,7 @@ public class Key implements Renderable, Touchable {
     @Override
     public void update(long delta) {
         if(playing) {
-            Log.d("Basic", "key " + frq + " now making a sound");
+            Log.d("Basic", "key " + frq + " now sending a sound to soundout");
             short[] data = MusicUtils.makeWave( soundOut.getBufferSize(), frq, 5000, soundOut.getSampleRate());
             soundOut.addToBuffer(data);
         }
@@ -86,22 +86,27 @@ public class Key implements Renderable, Touchable {
     }
 
     private void lightsOn(){
+        Log.d("Basic", "ligths on on key " + frq);
         setFillColor(255, r, g, b);
     }
 
     private void lightsOut(){
+        Log.d("Basic", "ligths out on key " + frq);
         setFillColor(123, r, g, b);
     }
 
     private void startPlayingNote() {
+        Log.d("Basic", "now setting play active on key " + frq);
         playing = true;
     }
 
     private void continuePlayingNote() {
+        Log.d("Basic", "now setting play active on key " + frq);
         playing = true;
     }
 
     private void stopPlayingNote() {
+        Log.d("Basic", "now setting play inactive on key " + frq);
         playing = false;
     }
 }

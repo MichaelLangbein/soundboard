@@ -15,7 +15,7 @@ public class BoardScene implements SceneLogic {
     private SoundOut soundOut;
 
     public BoardScene() {
-        soundOut = new SoundOut(44100, 17);
+        soundOut = new SoundOut(44100, 0.017);
         soundOut.start();
         board = new Board(220, 50, soundOut);
     }

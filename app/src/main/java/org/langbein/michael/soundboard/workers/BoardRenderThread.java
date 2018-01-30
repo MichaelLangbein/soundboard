@@ -1,6 +1,7 @@
 package org.langbein.michael.soundboard.workers;
 
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
@@ -47,7 +48,7 @@ public class BoardRenderThread extends Thread {
         while(running) {
 
             // Step 0 : how long did the loop take?
-            long beforeUpdateRender = System.nanoTime();
+            long beforeUpdateAndRender = System.nanoTime();
             long delta = sleepDuration + updateDuration;
 
             // Step 1 : scene logic
@@ -61,7 +62,8 @@ public class BoardRenderThread extends Thread {
             }
 
             // Step 3: sleep for remainder of frameTime
-            updateDuration = (System.nanoTime() - beforeUpdateRender) / 1000000L;
+            updateDuration = (System.nanoTime() - beforeUpdateAndRender) / 1000000L;
+            Log.d("Basic", "Render thread: update and render calls took " + updateDuration + " milisecs");
             sleepDuration = Math.max(2, frameTime - updateDuration);
             try{
                 Thread.sleep(sleepDuration);
