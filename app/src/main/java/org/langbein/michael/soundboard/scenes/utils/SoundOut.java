@@ -1,23 +1,20 @@
-package org.langbein.michael.soundboard.workers;
+package org.langbein.michael.soundboard.scenes.utils;
 
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 
-/**
- * Created by michael on 28.01.18.
- */
 
-public class SoundOutThread extends Thread {
+public class SoundOut {
 
-
-    private int sampleRate = 44100;
+    private int sampleRate;
     private int minSize;
     private AudioTrack track;
-    private boolean running;
+    private short[] buffer;
 
+    public SoundOut (int sampleRate) {
+        this.sampleRate = sampleRate;
 
-    public SoundOutThread () {
         minSize = AudioTrack.getMinBufferSize(sampleRate,
                 AudioFormat.CHANNEL_CONFIGURATION_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
@@ -29,18 +26,16 @@ public class SoundOutThread extends Thread {
                 minSize,
                 AudioTrack.MODE_STREAM);
 
-        running = true;
+        buffer = new short[100];
     }
 
-    @Override
-    public void run() {
-        track.play();
-        while (running) {
-            audioTrack.write(buffer, 0, buffer.length);
+    public void addToBuffer(short[] data) {
+        for(int i = 0; i < data.length; i++) {
+            buffer[i] += data[i];
         }
     }
 
-    public void addSoundToPlay(short[] sound) {
-
+    public void playAndEmptyBuffer(long delta) {
+        track.write(buffer, 0, buffer.length);
     }
 }
