@@ -31,6 +31,7 @@ public class SoundOut extends Thread {
                 minSize,
                 AudioTrack.MODE_STREAM);
 
+        // @TODO: should I use minSize here instead?
         buffer = new short[bufferSize];
 
 
@@ -49,7 +50,6 @@ public class SoundOut extends Thread {
     }
 
     public void addToBuffer(short[] data) {
-        Log.d("Basic", "Data is being added to buffer");
         if(data.length >= bufferSize) { //  if input is bigger than buffer, discard rest of input
             for(int i = 0; i < bufferSize; i++) {
                 buffer[i] += data[i];

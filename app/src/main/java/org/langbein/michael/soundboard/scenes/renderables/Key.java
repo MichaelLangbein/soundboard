@@ -47,7 +47,6 @@ public class Key implements Renderable, Touchable {
     @Override
     public void update(long delta) {
         if(playing) {
-            Log.d("Basic", "key " + frq + " now sending a sound to soundout");
             short[] data = MusicUtils.makeWave( soundOut.getBufferSize(), frq, 5000, soundOut.getSampleRate());
             soundOut.addToBuffer(data);
         }
