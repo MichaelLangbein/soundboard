@@ -38,7 +38,6 @@ public class SoundOut extends Thread {
 
     @Override
     public void run() {
-        Log.d("Basic", "Track being started --- now!");
         track.play();
         while(true){
             try {
@@ -68,7 +67,6 @@ public class SoundOut extends Thread {
      * For this reason, we don't need a separate thread for the sound-out class.
      */
     public void playAndEmptyBuffer(long delta) {
-        Log.d("Basic", "Buffer is being written to track and then emptied.");
         track.write(buffer, 0, buffer.length);
         for(int i = 0; i < bufferSize; i++) {
             buffer[i] = 0;

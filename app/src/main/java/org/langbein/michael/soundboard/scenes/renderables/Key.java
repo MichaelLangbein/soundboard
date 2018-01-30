@@ -25,12 +25,14 @@ public class Key implements Renderable, Touchable {
     private SoundOut soundOut;
     private boolean playing;
 
+    // State
+
     public Key(int posX, int posY, int len, float freq, int indx, SoundOut so) {
 
         // Graphics
         hex = new Hexagon(posX, posY, len);
         text = new Text(posX, posY, String.valueOf(indx), 20);
-        a = 125;
+        a = 123;
         r =  (int)(255 * Math.random());
         g =  (int)(255 * Math.random());
         b =  (int)(255 * Math.random());
@@ -60,21 +62,17 @@ public class Key implements Renderable, Touchable {
     @Override
     public void onTouch(MotionEvent event) {
         if(hex.isInsideBounds(event)) {
-            Log.d("Basic", "key " + frq + " is touched");
             switch(event.getFlags()){
                 case MotionEvent.ACTION_DOWN:
                     lightsOn();
                     startPlayingNote();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    lightsOn();
-                    continuePlayingNote();
                     break;
                 case MotionEvent.ACTION_UP:
                     lightsOut();
                     stopPlayingNote();
                     break;
             }
+
         } else {
             lightsOut();
             stopPlayingNote();
@@ -86,27 +84,22 @@ public class Key implements Renderable, Touchable {
     }
 
     private void lightsOn(){
-        Log.d("Basic", "ligths on on key " + frq);
         setFillColor(255, r, g, b);
     }
 
     private void lightsOut(){
-        Log.d("Basic", "ligths out on key " + frq);
         setFillColor(123, r, g, b);
     }
 
     private void startPlayingNote() {
-        Log.d("Basic", "now setting play active on key " + frq);
         playing = true;
     }
 
     private void continuePlayingNote() {
-        Log.d("Basic", "now setting play active on key " + frq);
         playing = true;
     }
 
     private void stopPlayingNote() {
-        Log.d("Basic", "now setting play inactive on key " + frq);
         playing = false;
     }
 }

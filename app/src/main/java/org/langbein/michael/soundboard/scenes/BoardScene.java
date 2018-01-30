@@ -22,7 +22,6 @@ public class BoardScene implements SceneLogic {
 
     @Override
     public void update(long delta) {
-        Log.d("Basic", "BoardScene update is called with delta = " + delta);
         board.update(delta);
         soundOut.playAndEmptyBuffer(delta);
     }

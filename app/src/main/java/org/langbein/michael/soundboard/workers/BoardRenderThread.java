@@ -63,7 +63,6 @@ public class BoardRenderThread extends Thread {
 
             // Step 3: sleep for remainder of frameTime
             updateDuration = (System.nanoTime() - beforeUpdateAndRender) / 1000000L;
-            Log.d("Basic", "Render thread: update and render calls took " + updateDuration + " milisecs");
             sleepDuration = Math.max(2, frameTime - updateDuration);
             try{
                 Thread.sleep(sleepDuration);

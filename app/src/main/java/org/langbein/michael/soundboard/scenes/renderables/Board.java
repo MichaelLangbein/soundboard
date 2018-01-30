@@ -51,6 +51,9 @@ public class Board {
     }
 
     public void update(long delta) {
+        for(int k = 0; k < nKeys; k++) {
+            keys[k].update(delta);
+        }
     }
 
     public boolean onTouch(MotionEvent event) {
