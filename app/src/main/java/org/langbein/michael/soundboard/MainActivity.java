@@ -8,6 +8,7 @@ import org.langbein.michael.soundboard.scenes.SceneLogic;
 import org.langbein.michael.soundboard.views.BoardView;
 import org.langbein.michael.soundboard.workers.BoardRenderThread;
 import org.langbein.michael.soundboard.workers.SoundInThread;
+import org.langbein.michael.soundboard.workers.SoundOutThread;
 
 
 /**

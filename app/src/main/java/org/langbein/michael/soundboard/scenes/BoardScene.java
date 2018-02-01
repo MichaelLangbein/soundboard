@@ -1,21 +1,20 @@
 package org.langbein.michael.soundboard.scenes;
 
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import org.langbein.michael.soundboard.scenes.renderables.Board;
-import org.langbein.michael.soundboard.scenes.utils.SoundOut;
+import org.langbein.michael.soundboard.workers.SoundOutThread;
 
 
 public class BoardScene implements SceneLogic {
 
 
     private Board board;
-    private SoundOut soundOut;
+    private SoundOutThread soundOut;
 
     public BoardScene() {
-        soundOut = new SoundOut(44100, 0.017);
+        soundOut = new SoundOutThread(44100, 0.017);
         soundOut.start();
         board = new Board(220, 50, soundOut);
     }
@@ -23,7 +22,7 @@ public class BoardScene implements SceneLogic {
     @Override
     public void update(long delta) {
         board.update(delta);
-        soundOut.playAndEmptyBuffer(delta);
+        // soundOut.playAndEmptyBuffer(delta); <-- this is not done. Will be done from soundthread.
     }
 
     @Override

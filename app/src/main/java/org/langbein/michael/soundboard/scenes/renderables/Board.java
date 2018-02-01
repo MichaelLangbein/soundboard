@@ -3,7 +3,7 @@ package org.langbein.michael.soundboard.scenes.renderables;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 
-import org.langbein.michael.soundboard.scenes.utils.SoundOut;
+import org.langbein.michael.soundboard.workers.SoundOutThread;
 import org.langbein.michael.soundboard.scenes.utils.Vec2;
 import org.langbein.michael.soundboard.scenes.utils.GridStateMachine;
 import org.langbein.michael.soundboard.scenes.utils.MusicUtils;
@@ -24,10 +24,10 @@ public class Board {
     private int deltaY;
     private int height;
     private int width;
-    private SoundOut soundOut;
+    private SoundOutThread soundOut;
 
 
-    public Board(float baseFreq, int sideLength, SoundOut so){
+    public Board(float baseFreq, int sideLength, SoundOutThread so){
 
         this.soundOut = so;
         this.nKeys = 49;
