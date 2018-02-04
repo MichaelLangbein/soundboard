@@ -24,6 +24,7 @@ public class Key implements Renderable, Touchable {
     private float frq;
     private SoundOutThread soundOut;
     private boolean playing;
+    private double offset;
 
     // State
 
@@ -41,13 +42,15 @@ public class Key implements Renderable, Touchable {
         soundOut = so;
         frq = freq;
         playing = false;
+        offset = 0;
 
     }
 
     @Override
     public void update(long delta) {
         if(playing) {
-            short[] data = MusicUtils.makeWave( soundOut.getBufferSize(), frq, 5000, soundOut.getSampleRate());
+            short[] data = MusicUtils.makeWave( soundOut.getBufferSize(), frq, 5000, soundOut.getSampleRate(), offset );
+            offset = MusicUtils.calcOffset(  soundOut.getBufferSize(), frq, soundOut.getSampleRate(), offset );
             soundOut.addToBuffer(data);
         }
     }

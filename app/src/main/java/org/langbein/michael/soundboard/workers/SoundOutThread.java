@@ -5,7 +5,12 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.util.Log;
 
-
+/**
+ * @TODO: schreibe alle neuen Daten in addToBuffer zunächst in einen Zwishchenarray,
+ * und ersetze diesen in playAndEmpty dann mit einem neuen array.
+ * Du könntest auch einen bool blocked verwenden, aber dann ginge der ganze Nutzen von einem Thread
+ * verloren.
+ */
 public class SoundOutThread extends Thread {
 
     private int bufferSize;
@@ -37,7 +42,6 @@ public class SoundOutThread extends Thread {
 
 
 
-
     }
 
     @Override
@@ -47,7 +51,9 @@ public class SoundOutThread extends Thread {
         long start, end, workTime, sleepTime;
         while(true) {
             start = System.currentTimeMillis();
+
             playAndEmptyBuffer();
+
             end = System.currentTimeMillis();
             workTime = end - start;
             sleepTime = frameTimeInMs - workTime;
