@@ -12,8 +12,9 @@ public class SoundOutThread extends Thread {
 
     private int bufferSize;
     private AudioTrack track;
-    private short[] prebuffer;
     private short[] buffer;
+    private short[] prebuffer;
+    private short prebufferSum;
     private long frameTimeInMs;
 
     public SoundOutThread(long frameTimeInMs) {
@@ -24,6 +25,7 @@ public class SoundOutThread extends Thread {
         bufferSize = (int) (sampleRate * frameTimeInS);
         buffer = new short[bufferSize]; // <--- To be sent to the sound hardware. May not be edited from outside
         prebuffer = new short[bufferSize]; // <--- To replace prebuffer. May be edited from outside.
+        prebufferSum = 1;
 
         // minSize is in bytes. the size of one chunk of data that the audioplayer consumes.
         int minSize = AudioTrack.getMinBufferSize(sampleRate,
@@ -68,11 +70,12 @@ public class SoundOutThread extends Thread {
         // Step 1: write buffer to sound out
         track.write(buffer, 0, buffer.length);
         for(int i = 0; i < bufferSize; i++) {
-            // Step 2: replace buffer with prebuffer
-            buffer[i] = prebuffer[i];
+            // Step 2: replace buffer with prebuffer, and normalize while you're at it.
+            buffer[i] = (short)(5000 * prebuffer[i] / prebufferSum);
             // Step 3: empty prebuffer
             prebuffer[i] = 0;
         }
+        prebufferSum = 1;
     }
 
     /**
@@ -84,10 +87,12 @@ public class SoundOutThread extends Thread {
         if(data.length >= bufferSize) { //  if input is bigger than buffer, discard rest of input
             for(int i = 0; i < bufferSize; i++) {
                 prebuffer[i] += data[i];
+                prebufferSum += data[i];
             }
         } else { // if input is smaller than buffer, leave end of buffer empty.
             for(int i = 0; i < data.length; i++) {
                 prebuffer[i] += data[i];
+                prebufferSum += data[i];
             }
         }
 
