@@ -6,29 +6,26 @@ import android.media.AudioTrack;
 import android.util.Log;
 
 /**
- * @TODO: schreibe alle neuen Daten in addToBuffer zunächst in einen Zwishchenarray,
- * und ersetze diesen in playAndEmpty dann mit einem neuen array.
- * Du könntest auch einen bool blocked verwenden, aber dann ginge der ganze Nutzen von einem Thread
- * verloren.
+ * @TODO: Instead of accepting an arbitrary frame-time, accept a number of sound-chunks-per-frame value.
  */
 public class SoundOutThread extends Thread {
 
     private int bufferSize;
     private AudioTrack track;
+    private short[] prebuffer;
     private short[] buffer;
     private long frameTimeInMs;
 
-    public SoundOutThread(int sampleRate, long frameTimeInMs) {
+    public SoundOutThread(long frameTimeInMs) {
 
+        int sampleRate = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
         this.frameTimeInMs = frameTimeInMs;
-
-        // Say we have a loopTime of 17 ms. At a frameRate of 44100 Hz and Mono that makes 750 samples.
         double frameTimeInS = (frameTimeInMs * 0.001);
-        bufferSize = (int) (sampleRate * frameTimeInS) + 1;
-        buffer = new short[bufferSize];
+        bufferSize = (int) (sampleRate * frameTimeInS);
+        buffer = new short[bufferSize]; // <--- To be sent to the sound hardware. May not be edited from outside
+        prebuffer = new short[bufferSize]; // <--- To replace prebuffer. May be edited from outside.
 
-        // minSize is in bytes. Is the size of one chunk of data the audioplayer consumes.
-        // because we loop every 17 ms, we always feed the player a buffer large enough for several chunks.
+        // minSize is in bytes. the size of one chunk of data that the audioplayer consumes.
         int minSize = AudioTrack.getMinBufferSize(sampleRate,
                 AudioFormat.CHANNEL_CONFIGURATION_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
@@ -68,20 +65,29 @@ public class SoundOutThread extends Thread {
     }
 
     private void playAndEmptyBuffer() {
+        // Step 1: write buffer to sound out
         track.write(buffer, 0, buffer.length);
         for(int i = 0; i < bufferSize; i++) {
-            buffer[i] = 0;
+            // Step 2: replace buffer with prebuffer
+            buffer[i] = prebuffer[i];
+            // Step 3: empty prebuffer
+            prebuffer[i] = 0;
         }
     }
 
+    /**
+     * data may only be added to prebuffer, nut to actual buffer.
+     * This we we avoid the buffer being edited while it is on its way to the hardware.
+     * @param data
+     */
     public void addToBuffer(short[] data) {
         if(data.length >= bufferSize) { //  if input is bigger than buffer, discard rest of input
             for(int i = 0; i < bufferSize; i++) {
-                buffer[i] += data[i];
+                prebuffer[i] += data[i];
             }
         } else { // if input is smaller than buffer, leave end of buffer empty.
             for(int i = 0; i < data.length; i++) {
-                buffer[i] += data[i];
+                prebuffer[i] += data[i];
             }
         }
 
