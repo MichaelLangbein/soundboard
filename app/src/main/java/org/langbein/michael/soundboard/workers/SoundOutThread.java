@@ -41,6 +41,7 @@ public class SoundOutThread extends Thread {
 
     @Override
     public void run() {
+        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         track.play();
         while(running) {
             playAndEmptyBuffer();
@@ -55,9 +56,6 @@ public class SoundOutThread extends Thread {
         }
         Log.d("Basic", "about to write out " + len + " datapoints");
         track.write(data, 0, data.length);
-
-        // todo: sleep until data is written?
-        // if buffer.size == 0: sleep 17
     }
 
 
