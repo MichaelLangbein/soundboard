@@ -14,7 +14,7 @@ public class BoardScene implements SceneLogic {
     private SoundOutThread soundOut;
 
     public BoardScene() {
-        soundOut = new SoundOutThread(17);
+        soundOut = new SoundOutThread();
         soundOut.start();
         board = new Board(220, 50, soundOut);
     }
@@ -22,7 +22,6 @@ public class BoardScene implements SceneLogic {
     @Override
     public void update(long delta) {
         board.update(delta);
-        // soundOut.playAndEmptyBuffer(delta); <-- this is not done. Will be done from soundthread.
     }
 
     @Override

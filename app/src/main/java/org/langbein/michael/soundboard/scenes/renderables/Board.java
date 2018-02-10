@@ -3,6 +3,7 @@ package org.langbein.michael.soundboard.scenes.renderables;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 
+import org.langbein.michael.soundboard.scenes.utils.SoundOutWrapper;
 import org.langbein.michael.soundboard.workers.SoundOutThread;
 import org.langbein.michael.soundboard.scenes.utils.Vec2;
 import org.langbein.michael.soundboard.scenes.utils.GridStateMachine;
@@ -17,21 +18,20 @@ import static java.lang.Math.random;
 public class Board {
 
     private int nKeys;
-    private float baseFreq;
     private Key[] keys;
     private int l;
     private int deltaX;
     private int deltaY;
     private int height;
     private int width;
-    private SoundOutThread soundOut;
+    private SoundOutWrapper sow;
 
 
     public Board(float baseFreq, int sideLength, SoundOutThread so){
 
-        this.soundOut = so;
-        this.nKeys = 49;
-        this.baseFreq = baseFreq;
+        sow = new SoundOutWrapper(so);
+
+        nKeys = 49;
 
         l = sideLength;
         deltaX = (int) (l * Math.cos(Math.PI / 6));
@@ -44,7 +44,7 @@ public class Board {
         for(int k = 0; k < nKeys; k++) {
             Vec2<Integer> pos = getPos(k);
             float freq = MusicUtils.getNthTone(baseFreq, k);
-            Key key = new Key(pos.x, pos.y, l, freq, k, soundOut);
+            Key key = new Key(pos.x, pos.y, l, freq, k, sow);
             key.setFillColor(123, (int)(255 * random()), (int)(255 * random()), (int)(255 * random()));
             keys[k] = key;
         }
@@ -54,6 +54,7 @@ public class Board {
         for(int k = 0; k < nKeys; k++) {
             keys[k].update(delta);
         }
+        sow.flush();
     }
 
     public boolean onTouch(MotionEvent event) {

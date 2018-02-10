@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import org.langbein.michael.soundboard.scenes.renderables.graphicsPrimitives.Hexagon;
 import org.langbein.michael.soundboard.scenes.renderables.graphicsPrimitives.Text;
 import org.langbein.michael.soundboard.scenes.utils.MusicUtils;
+import org.langbein.michael.soundboard.scenes.utils.SoundOutWrapper;
 import org.langbein.michael.soundboard.workers.SoundOutThread;
 
 
@@ -22,13 +23,13 @@ public class Key implements Renderable, Touchable {
 
     // Sound
     private float frq;
-    private SoundOutThread soundOut;
+    private SoundOutWrapper soundOut;
     private boolean playing;
     private double offset;
 
     // State
 
-    public Key(int posX, int posY, int len, float freq, int indx, SoundOutThread so) {
+    public Key(int posX, int posY, int len, float freq, int indx, SoundOutWrapper so) {
 
         // Graphics
         hex = new Hexagon(posX, posY, len);
@@ -51,7 +52,7 @@ public class Key implements Renderable, Touchable {
         if(playing) {
             short[] data = MusicUtils.makeWave( soundOut.getBufferSize(), frq, 5000, soundOut.getSampleRate(), offset );
             offset = MusicUtils.calcOffset(  soundOut.getBufferSize(), frq, soundOut.getSampleRate(), offset );
-            soundOut.addToBuffer(data);
+            soundOut.addToPrebuffer(data);
         }
     }
 
