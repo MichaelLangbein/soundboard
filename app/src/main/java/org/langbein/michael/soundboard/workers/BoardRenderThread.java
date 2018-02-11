@@ -42,6 +42,8 @@ public class BoardRenderThread extends Thread {
     @Override
     public void run() {
 
+        Thread.currentThread().setName("BoardRenderThread");
+
         long updateDuration = 0;
         long sleepDuration = 0;
 

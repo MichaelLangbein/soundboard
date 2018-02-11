@@ -21,7 +21,7 @@ public class SoundOutThread extends Thread {
 
         running = true;
 
-        prebuffer = new LinkedBlockingQueue<Short>();
+        prebuffer = new LinkedBlockingQueue<Short>(); // @TODO: should have a maximum size
 
         sampleRate = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
 
@@ -41,6 +41,7 @@ public class SoundOutThread extends Thread {
 
     @Override
     public void run() {
+        Thread.currentThread().setName("SoundOutThread");
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         track.play();
         while(running) {
@@ -69,6 +70,10 @@ public class SoundOutThread extends Thread {
 
 
     public void addToBuffer(short[] data) {
+        /*
+        @TODO: offer instead of add, once limited prebufer size is implemented
+        @TODO: this method seems to go very slow!
+        */
         Log.d("Basic", "About to add " + data.length + " elements to prebuffer");
         for(int i = 0; i < data.length; i++) {
             prebuffer.add(data[i]);
