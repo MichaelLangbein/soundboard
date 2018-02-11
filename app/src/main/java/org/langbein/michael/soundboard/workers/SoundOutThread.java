@@ -50,12 +50,21 @@ public class SoundOutThread extends Thread {
 
     private void playAndEmptyBuffer() {
         int len = prebuffer.size();
-        short[] data = new short[len];
-        for(int i = 0; i < len; i++){
-            data[i] = prebuffer.poll();
+        if(len > 0){
+            short[] data = new short[len];
+            for(int i = 0; i < len; i++){
+                data[i] = prebuffer.poll();
+            }
+            Log.d("Basic", "about to write out " + len + " datapoints");
+            track.write(data, 0, data.length);
+        } else {
+            try {
+                Log.d("Basic", "SoundOutThread sleeping 10 ms");
+                Thread.currentThread().sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        Log.d("Basic", "about to write out " + len + " datapoints");
-        track.write(data, 0, data.length);
     }
 
 

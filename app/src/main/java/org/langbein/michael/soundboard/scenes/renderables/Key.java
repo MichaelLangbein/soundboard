@@ -104,5 +104,6 @@ public class Key implements Renderable, Touchable {
 
     private void stopPlayingNote() {
         playing = false;
+        offset = 0;
     }
 }
