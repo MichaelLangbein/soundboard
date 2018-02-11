@@ -27,9 +27,9 @@ public class Board {
     private SoundOutWrapper sow;
 
 
-    public Board(float baseFreq, int sideLength, SoundOutThread so){
+    public Board(float baseFreq, int sideLength, SoundOutWrapper sow){
 
-        sow = new SoundOutWrapper(so);
+        this.sow = sow;
 
         nKeys = 49;
 

@@ -27,7 +27,7 @@ public class BoardRenderThread extends Thread {
         scene = sc;
         surfaceHolder = bv.getHolder();
         running = true;
-        frameTime = 17;
+        frameTime = 50;
     }
 
 
