@@ -13,14 +13,8 @@ public class BoardScene implements SceneLogic {
 
 
     private Board board;
-    private SoundOutThread soundOut;
 
-    public BoardScene() {
-        soundOut = new SoundOutThread();
-        soundOut.start();
-        int bufferSize = (int) (0.050 * soundOut.getSampleRate());
-        Log.d("Basic", "bufferSize at 50ms frameRate equals " + bufferSize); // expected to be 1444 * 50/17 = 4247
-        SoundOutWrapper sow = new SoundOutWrapper(soundOut, bufferSize);
+    public BoardScene(SoundOutWrapper sow) {
         board = new Board(220, 50, sow);
     }
 

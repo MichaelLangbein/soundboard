@@ -50,6 +50,7 @@ public class Key implements Renderable, Touchable {
     @Override
     public void update(long delta) {
         if(playing) {
+            Log.d("Basic", "Note " + frq + " now adding data to prebuffer.");
             short[] data = MusicUtils.makeWave( soundOut.getBufferSize(), frq, 5000, soundOut.getSampleRate(), offset );
             offset = MusicUtils.calcOffset(  soundOut.getBufferSize(), frq, soundOut.getSampleRate(), offset );
             soundOut.addToPrebuffer(data);

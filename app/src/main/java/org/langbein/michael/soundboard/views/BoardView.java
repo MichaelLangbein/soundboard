@@ -1,12 +1,16 @@
 package org.langbein.michael.soundboard.views;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import org.langbein.michael.soundboard.scenes.BoardScene;
 import org.langbein.michael.soundboard.scenes.SceneLogic;
+import org.langbein.michael.soundboard.scenes.utils.SoundOutWrapper;
 import org.langbein.michael.soundboard.workers.BoardRenderThread;
+import org.langbein.michael.soundboard.workers.SoundOutThread;
 
 
 /**
@@ -21,20 +25,29 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback {
 
     private SceneLogic sl;
     private BoardRenderThread brt;
+    private SoundOutThread sot;
 
-    public BoardView(Context context, SceneLogic sl) {
+    public BoardView(Context context) {
         super(context);
-        this.sl = sl;
+
+        sot = new SoundOutThread();
+        int bufferSize = (int) (0.050 * sot.getSampleRate());
+        SoundOutWrapper sow = new SoundOutWrapper(sot, bufferSize);
+
+        SceneLogic boardScene = new BoardScene(sow);
+        this.sl = boardScene;
         this.brt = new BoardRenderThread(this, sl);
     }
 
     public void startRendering() {
+        sot.start();
         brt.enableRendering();
         brt.start();
     }
 
     public void stopRendering() {
         brt.disableRendering();
+        sot.close();
     }
 
 

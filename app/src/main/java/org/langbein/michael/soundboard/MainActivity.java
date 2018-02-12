@@ -21,14 +21,12 @@ import org.langbein.michael.soundboard.workers.SoundOutThread;
 public class MainActivity extends AppCompatActivity {
 
     BoardView boardView;
-    BoardScene boardScene;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boardScene = new BoardScene();
-        boardView = new BoardView(this, boardScene);
+        boardView = new BoardView(this);
         setContentView(boardView);
         boardView.startRendering();
     }

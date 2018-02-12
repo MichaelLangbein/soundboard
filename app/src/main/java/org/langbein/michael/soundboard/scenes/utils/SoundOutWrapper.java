@@ -13,7 +13,7 @@ public class SoundOutWrapper {
     public SoundOutWrapper(SoundOutThread soundOutThread, int bffSze) {
         so = soundOutThread;
         sampleRate = so.getSampleRate();
-        bufferSize = bffSze; //844 + 600; // TODO: actually, board must calculate this, based on gamethread frequency. I already learned that 1444 is a good buffer size.
+        bufferSize = bffSze;
         preBuffer = new short[bufferSize];
     }
 
@@ -32,6 +32,9 @@ public class SoundOutWrapper {
 
     public void flush() {
         so.addToBuffer(preBuffer);
+        for(int i = 0; i < preBuffer.length; i++) {
+            preBuffer[i] = 0;
+        }
     }
 
     public int getBufferSize() {
