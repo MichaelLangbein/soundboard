@@ -3,6 +3,7 @@ package org.langbein.michael.soundboard.scenes.renderables;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 
+import org.langbein.michael.soundboard.scenes.utils.SoundInWrapper;
 import org.langbein.michael.soundboard.scenes.utils.SoundOutWrapper;
 import org.langbein.michael.soundboard.workers.SoundOutThread;
 import org.langbein.michael.soundboard.scenes.utils.Vec2;
@@ -24,11 +25,13 @@ public class Board {
     private int deltaY;
     private int height;
     private int width;
+    private SoundInWrapper siw;
     private SoundOutWrapper sow;
 
 
-    public Board(float baseFreq, int sideLength, SoundOutWrapper sow){
+    public Board(float baseFreq, int sideLength, SoundInWrapper siw, SoundOutWrapper sow){
 
+        this.siw = siw;
         this.sow = sow;
 
         nKeys = 49;
@@ -44,7 +47,7 @@ public class Board {
         for(int k = 0; k < nKeys; k++) {
             Vec2<Integer> pos = getPos(k);
             float freq = MusicUtils.getNthTone(baseFreq, k);
-            Key key = new Key(pos.x, pos.y, l, freq, k, sow);
+            Key key = new Key(pos.x, pos.y, l, freq, k, siw, sow);
             key.setFillColor(123, (int)(255 * random()), (int)(255 * random()), (int)(255 * random()));
             keys[k] = key;
         }

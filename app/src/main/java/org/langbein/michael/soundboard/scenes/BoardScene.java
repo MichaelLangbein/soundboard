@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import org.langbein.michael.soundboard.scenes.renderables.Board;
+import org.langbein.michael.soundboard.scenes.utils.SoundInWrapper;
 import org.langbein.michael.soundboard.scenes.utils.SoundOutWrapper;
 import org.langbein.michael.soundboard.workers.SoundOutThread;
 
@@ -14,8 +15,8 @@ public class BoardScene implements SceneLogic {
 
     private Board board;
 
-    public BoardScene(SoundOutWrapper sow) {
-        board = new Board(220, 50, sow);
+    public BoardScene(SoundInWrapper siw, SoundOutWrapper sow) {
+        board = new Board(220, 50, siw, sow);
     }
 
     @Override
