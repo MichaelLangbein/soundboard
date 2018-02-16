@@ -9,4 +9,7 @@ import org.langbein.michael.soundboard.workers.SoundInThread;
 public class SoundInWrapper {
     public SoundInWrapper(SoundInThread sit) {
     }
+
+    public short[] getData() {
+    }
 }

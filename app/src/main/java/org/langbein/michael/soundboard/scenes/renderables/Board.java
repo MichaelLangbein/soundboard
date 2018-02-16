@@ -25,6 +25,7 @@ public class Board {
     private int deltaY;
     private int height;
     private int width;
+
     private SoundInWrapper siw;
     private SoundOutWrapper sow;
 
@@ -54,9 +55,16 @@ public class Board {
     }
 
     public void update(long delta) {
+
+        // Step 1: allow keys to add data to buffer
         for(int k = 0; k < nKeys; k++) {
             keys[k].update(delta);
         }
+
+        // Step 2: add in to buffer
+        sow.addToPrebuffer(siw.getData());
+
+        // Step 3: flush
         sow.flush();
     }
 
