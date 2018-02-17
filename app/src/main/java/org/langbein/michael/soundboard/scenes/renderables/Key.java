@@ -6,10 +6,8 @@ import android.view.MotionEvent;
 
 import org.langbein.michael.soundboard.scenes.renderables.graphicsPrimitives.Hexagon;
 import org.langbein.michael.soundboard.scenes.renderables.graphicsPrimitives.Text;
-import org.langbein.michael.soundboard.scenes.utils.MusicUtils;
-import org.langbein.michael.soundboard.scenes.utils.SoundInWrapper;
-import org.langbein.michael.soundboard.scenes.utils.SoundOutWrapper;
-import org.langbein.michael.soundboard.workers.SoundOutThread;
+import org.langbein.michael.soundboard.utils.MusicUtils;
+import org.langbein.michael.soundboard.utils.SoundWrapper;
 
 
 public class Key implements Renderable, Touchable {
@@ -24,14 +22,13 @@ public class Key implements Renderable, Touchable {
 
     // Sound
     private float frq;
-    private SoundInWrapper soundIn;
-    private SoundOutWrapper soundOut;
+    private SoundWrapper sound;
     private boolean playing;
     private double offset;
 
     // State
 
-    public Key(int posX, int posY, int len, float freq, int indx, SoundInWrapper si, SoundOutWrapper so) {
+    public Key(int posX, int posY, int len, float freq, int indx, SoundWrapper sw) {
 
         // Graphics
         hex = new Hexagon(posX, posY, len);
@@ -42,8 +39,7 @@ public class Key implements Renderable, Touchable {
         b =  (int)(255 * Math.random());
 
         // Sound
-        soundIn = si;
-        soundOut = so;
+        sound = sw;
         frq = freq;
         playing = false;
         offset = 0;
@@ -54,9 +50,23 @@ public class Key implements Renderable, Touchable {
     public void update(long delta) {
         if(playing) {
             Log.d("Basic", "Note " + frq + " now adding data to prebuffer.");
-            short[] data = MusicUtils.makeWave( soundOut.getBufferSize(), frq, 5000, soundOut.getSampleRate(), offset );
-            offset = MusicUtils.calcOffset(  soundOut.getBufferSize(), frq, soundOut.getSampleRate(), offset );
-            soundOut.addToPrebuffer(data);
+
+            int bufferSize, sampleRate;
+            short[] data;
+            try {
+
+                bufferSize = sound.getBufferSize();
+                sampleRate = sound.getSampleRate();
+
+                data = MusicUtils.makeWave( bufferSize, frq, 5000, sampleRate, offset );
+                offset = MusicUtils.calcOffset( bufferSize, frq, sampleRate, offset );
+
+                sound.addToCurrentBatch(data);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

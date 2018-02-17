@@ -2,8 +2,8 @@ package org.langbein.michael.soundboard;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.langbein.michael.soundboard.scenes.utils.GridStateMachine;
-import org.langbein.michael.soundboard.scenes.utils.Vec2;
+import org.langbein.michael.soundboard.utils.GridStateMachine;
+import org.langbein.michael.soundboard.utils.Vec2;
 
 /**
  * Created by michael on 28.01.18.

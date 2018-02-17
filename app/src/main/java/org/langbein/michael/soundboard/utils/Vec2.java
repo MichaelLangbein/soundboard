@@ -1,4 +1,4 @@
-package org.langbein.michael.soundboard.scenes.utils;
+package org.langbein.michael.soundboard.utils;
 
 
 

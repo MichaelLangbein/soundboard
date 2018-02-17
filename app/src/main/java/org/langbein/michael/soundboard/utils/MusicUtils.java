@@ -1,7 +1,5 @@
-package org.langbein.michael.soundboard.scenes.utils;
+package org.langbein.michael.soundboard.utils;
 
-
-import android.util.Log;
 
 public class MusicUtils {
 

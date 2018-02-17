@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.view.MotionEvent;
 
-import org.langbein.michael.soundboard.scenes.utils.Vec2;
+import org.langbein.michael.soundboard.utils.Vec2;
 
 /**
  * Created by michael on 28.01.18.

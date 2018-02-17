@@ -3,12 +3,10 @@ package org.langbein.michael.soundboard.scenes.renderables;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 
-import org.langbein.michael.soundboard.scenes.utils.SoundInWrapper;
-import org.langbein.michael.soundboard.scenes.utils.SoundOutWrapper;
-import org.langbein.michael.soundboard.workers.SoundOutThread;
-import org.langbein.michael.soundboard.scenes.utils.Vec2;
-import org.langbein.michael.soundboard.scenes.utils.GridStateMachine;
-import org.langbein.michael.soundboard.scenes.utils.MusicUtils;
+import org.langbein.michael.soundboard.utils.SoundWrapper;
+import org.langbein.michael.soundboard.utils.Vec2;
+import org.langbein.michael.soundboard.utils.GridStateMachine;
+import org.langbein.michael.soundboard.utils.MusicUtils;
 
 import static java.lang.Math.random;
 
@@ -18,6 +16,7 @@ import static java.lang.Math.random;
 
 public class Board {
 
+    private SoundWrapper sw;
     private int nKeys;
     private Key[] keys;
     private int l;
@@ -26,14 +25,11 @@ public class Board {
     private int height;
     private int width;
 
-    private SoundInWrapper siw;
-    private SoundOutWrapper sow;
 
 
-    public Board(float baseFreq, int sideLength, SoundInWrapper siw, SoundOutWrapper sow){
+    public Board(float baseFreq, int sideLength, SoundWrapper sw){
 
-        this.siw = siw;
-        this.sow = sow;
+        this.sw = sw;
 
         nKeys = 49;
 
@@ -48,7 +44,7 @@ public class Board {
         for(int k = 0; k < nKeys; k++) {
             Vec2<Integer> pos = getPos(k);
             float freq = MusicUtils.getNthTone(baseFreq, k);
-            Key key = new Key(pos.x, pos.y, l, freq, k, siw, sow);
+            Key key = new Key(pos.x, pos.y, l, freq, k, sw);
             key.setFillColor(123, (int)(255 * random()), (int)(255 * random()), (int)(255 * random()));
             keys[k] = key;
         }
@@ -56,16 +52,21 @@ public class Board {
 
     public void update(long delta) {
 
-        // Step 1: allow keys to add data to buffer
+        // Step 1: get data from mic
+        sw.fetchNewBatch();
+
+        // Step 2: allow keys to modify data
         for(int k = 0; k < nKeys; k++) {
             keys[k].update(delta);
         }
 
-        // Step 2: add in to buffer
-        sow.addToPrebuffer(siw.getData());
+        // Step 3: send data to amp
+        try {
+            sw.flushCurrentBatch();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        // Step 3: flush
-        sow.flush();
     }
 
     public boolean onTouch(MotionEvent event) {

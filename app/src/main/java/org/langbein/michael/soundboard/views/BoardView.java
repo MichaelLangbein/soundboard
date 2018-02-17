@@ -1,15 +1,13 @@
 package org.langbein.michael.soundboard.views;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import org.langbein.michael.soundboard.scenes.BoardScene;
 import org.langbein.michael.soundboard.scenes.SceneLogic;
-import org.langbein.michael.soundboard.scenes.utils.SoundInWrapper;
-import org.langbein.michael.soundboard.scenes.utils.SoundOutWrapper;
+import org.langbein.michael.soundboard.utils.SoundWrapper;
 import org.langbein.michael.soundboard.workers.BoardRenderThread;
 import org.langbein.michael.soundboard.workers.SoundInThread;
 import org.langbein.michael.soundboard.workers.SoundOutThread;
@@ -29,31 +27,30 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback {
     private BoardRenderThread brt;
     private SoundInThread sit;
     private SoundOutThread sot;
+    private SoundWrapper sw;
+
 
     public BoardView(Context context) {
         super(context);
 
         sit = new SoundInThread();
-        SoundInWrapper siw = new SoundInWrapper(sit);
-
         sot = new SoundOutThread();
-        int bufferSize = (int) (0.050 * sot.getSampleRate());
-        SoundOutWrapper sow = new SoundOutWrapper(sot, bufferSize);
+        sw = new SoundWrapper(sit, sot);
 
-        SceneLogic boardScene = new BoardScene(siw, sow);
+        SceneLogic boardScene = new BoardScene(sw);
         this.sl = boardScene;
         this.brt = new BoardRenderThread(this, sl);
     }
 
     public void startRendering() {
-        sot.start();
+        sw.startThreads();
         brt.enableRendering();
         brt.start();
     }
 
     public void stopRendering() {
         brt.disableRendering();
-        sot.close();
+        sw.stopThreads();
     }
 
 

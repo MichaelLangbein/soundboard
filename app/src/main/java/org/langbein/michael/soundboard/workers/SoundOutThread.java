@@ -85,6 +85,12 @@ public class SoundOutThread extends Thread {
     }
 
     public void addToBuffer(short[] data) {
+	/**
+	 * put <------------ blocking
+	 * add <------------ exception
+	 * offer <---------- special value
+	 * offer(long) <---- timeout
+	 */
         //Log.d("Basic", "About to add " + data.length + " elements to prebuffer");
         for(int i = 0; i < data.length; i++) {
             prebuffer.add(data[i]);
@@ -97,6 +103,7 @@ public class SoundOutThread extends Thread {
 
     public void close() {
         running = false;
+        track.stop();
     }
 
 }
