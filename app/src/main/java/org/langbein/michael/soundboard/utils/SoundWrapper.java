@@ -23,17 +23,17 @@ public class SoundWrapper {
     public void fetchNewBatch() {
         currentBatch = sit.takeFromBuffer();
 
-        // This block is only for debugging.
-//            long sum = 0;
-//            for(int i = 0; i < currentBatch.length; i++) {
-//                sum += Math.abs(currentBatch[i]);
-//            }
-//            Log.d("Basic", "Obtained " + currentBatch.length + " datapoints. Sum: " + sum );
+        for(int i = 0; i < currentBatch.length; i++) {
+            currentBatch[i] = (short) (currentBatch[i] * 100);
+        }
+        Log.d("Basic", "Obtained " + currentBatch.length + " datapoints. " );
 
 
     }
 
     public void addToCurrentBatch(short[] data) throws Exception {
+
+        Log.d("Basic", "Now adding "+data.length+" datapoints to soundbuffer.");
 
         if(currentBatch == null) {
             throw new Exception("There is currently no batch of sounddata. You must first call fetchNewBatch().");
@@ -45,7 +45,7 @@ public class SoundWrapper {
             }
         } else { // leave last values empty
             for (int i = 0; i < data.length; i++) {
-                currentBatch[i] = data[i];
+                currentBatch[i] += data[i];
             }
         }
     }
