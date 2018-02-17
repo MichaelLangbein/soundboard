@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import org.langbein.michael.soundboard.scenes.BoardScene;
 import org.langbein.michael.soundboard.scenes.SceneLogic;
+import org.langbein.michael.soundboard.utils.SoundWrapper;
 import org.langbein.michael.soundboard.views.BoardView;
 import org.langbein.michael.soundboard.workers.BoardRenderThread;
 import org.langbein.michael.soundboard.workers.SoundInThread;
@@ -26,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boardView = new BoardView(this);
+        SoundWrapper sw = new SoundWrapper();
+        boardView = new BoardView(this, sw);
         setContentView(boardView);
         boardView.startRendering();
     }

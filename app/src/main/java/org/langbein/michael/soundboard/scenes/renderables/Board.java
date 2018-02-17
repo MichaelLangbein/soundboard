@@ -54,7 +54,7 @@ public class Board {
     public void update(long delta) {
 
         // Step 1: get data from mic
-        sw.fetchNewBatch();
+        sw.fetchNewBatch(delta);
 
         // Step 2: allow keys to modify data
         for(int k = 0; k < nKeys; k++) {

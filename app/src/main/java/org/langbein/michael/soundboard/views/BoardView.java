@@ -31,18 +31,12 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback {
 
     private SceneLogic sl;
     private BoardRenderThread brt;
-    private SoundInThread sit;
-    private SoundOutThread sot;
     private SoundWrapper sw;
 
 
-    public BoardView(Context context) {
+    public BoardView(Context context, SoundWrapper sw) {
         super(context);
-
-        sit = new SoundInThread();
-        sot = new SoundOutThread();
-        sw = new SoundWrapper(sit, sot);
-
+        this.sw = sw;
         this.sl = new BoardScene(sw);;
         this.brt = new BoardRenderThread(this, sl);
     }

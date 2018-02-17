@@ -7,6 +7,11 @@ import org.langbein.michael.soundboard.workers.SoundOutThread;
 
 /**
  * Created by michael on 17.02.18.
+ *
+ * @TODO: in the future, the user will be able to chose what input source to use.
+ * The sound wrapper will then internally exchange the SoundInThread for a MusicFile thread, for example.
+ * However, to the outside world this will not be visible. Nevermind what the current
+ * input is, data will always be obtained via soundWrapper.fetchNewBatch().
  */
 
 public class SoundWrapper {
@@ -15,12 +20,12 @@ public class SoundWrapper {
     private SoundInThread sit;
     private short[] currentBatch;
 
-    public SoundWrapper(SoundInThread sit, SoundOutThread sot) {
-        this.sit = sit;
-        this.sot = sot;
+    public SoundWrapper() {
+        this.sit = new SoundInThread();
+        this.sot = new SoundOutThread();
     }
 
-    public void fetchNewBatch() {
+    public void fetchNewBatch(long delta) {
         currentBatch = sit.takeFromBuffer();
 
         for(int i = 0; i < currentBatch.length; i++) {
