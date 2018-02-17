@@ -104,6 +104,7 @@ public class SoundOutThread extends Thread {
     public void close() {
         running = false;
         track.stop();
+        track.release();
     }
 
 }

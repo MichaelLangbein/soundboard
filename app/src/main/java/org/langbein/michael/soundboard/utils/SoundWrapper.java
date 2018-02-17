@@ -1,5 +1,7 @@
 package org.langbein.michael.soundboard.utils;
 
+import android.util.Log;
+
 import org.langbein.michael.soundboard.workers.SoundInThread;
 import org.langbein.michael.soundboard.workers.SoundOutThread;
 
@@ -20,6 +22,15 @@ public class SoundWrapper {
 
     public void fetchNewBatch() {
         currentBatch = sit.takeFromBuffer();
+
+        // This block is only for debugging.
+//            long sum = 0;
+//            for(int i = 0; i < currentBatch.length; i++) {
+//                sum += Math.abs(currentBatch[i]);
+//            }
+//            Log.d("Basic", "Obtained " + currentBatch.length + " datapoints. Sum: " + sum );
+
+
     }
 
     public void addToCurrentBatch(short[] data) throws Exception {
@@ -78,4 +89,5 @@ public class SoundWrapper {
         sit.close();
         sot.close();
     }
+
 }

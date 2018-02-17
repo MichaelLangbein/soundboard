@@ -14,6 +14,12 @@ import org.langbein.michael.soundboard.workers.SoundOutThread;
 
 
 /**
+ * Coming from a web background, I like to think of activities and views as server- and client-side.
+ * An activity is like the server, in that it does the background logic and only talks when called.
+ * A view is like the client side, in that it contains the render loop and calls upon the server
+ * when neccessary.
+ *
+ *
  * A surfaceView is a special kind of view
  * that can expose a surface-holder, and with that a surface, and with that a canvas.
  * This is important, because the SurfaceView typically creates a custom thread that it exposes
@@ -37,8 +43,7 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback {
         sot = new SoundOutThread();
         sw = new SoundWrapper(sit, sot);
 
-        SceneLogic boardScene = new BoardScene(sw);
-        this.sl = boardScene;
+        this.sl = new BoardScene(sw);;
         this.brt = new BoardRenderThread(this, sl);
     }
 

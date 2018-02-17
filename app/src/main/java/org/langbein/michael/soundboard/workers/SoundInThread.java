@@ -51,6 +51,8 @@ public class SoundInThread extends Thread {
          * offer <---------- special value
          * offer(long) <---- timeout
          */
+        Thread.currentThread().setName("SoundInThread");
+        Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         audioRecord.startRecording();
         while (true) {
             if(recording){
@@ -98,6 +100,7 @@ public class SoundInThread extends Thread {
     public void close() {
         stopRecording();
         audioRecord.stop();
+        audioRecord.release();
     }
 
     public void stopRecording() {
