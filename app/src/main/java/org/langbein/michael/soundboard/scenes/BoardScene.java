@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 
 import org.langbein.michael.soundboard.scenes.renderables.Board;
-import org.langbein.michael.soundboard.utils.SoundWrapper;
+import org.langbein.michael.soundboard.sound.SoundWrapper;
 
 
 public class BoardScene implements SceneLogic {

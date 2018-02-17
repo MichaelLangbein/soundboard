@@ -1,4 +1,4 @@
-package org.langbein.michael.soundboard.workers;
+package org.langbein.michael.soundboard.sound;
 
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -9,7 +9,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
-public class SoundOutThread extends Thread {
+public class SoundOutThread extends Thread implements SoundOut {
 
     private final int sampleRate;
     private final int minSize;

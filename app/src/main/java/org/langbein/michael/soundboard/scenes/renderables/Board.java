@@ -1,10 +1,9 @@
 package org.langbein.michael.soundboard.scenes.renderables;
 
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.MotionEvent;
 
-import org.langbein.michael.soundboard.utils.SoundWrapper;
+import org.langbein.michael.soundboard.sound.SoundWrapper;
 import org.langbein.michael.soundboard.utils.Vec2;
 import org.langbein.michael.soundboard.utils.GridStateMachine;
 import org.langbein.michael.soundboard.utils.MusicUtils;
@@ -94,6 +93,9 @@ public class Board {
         int x = width - (14 - indxPos.y) * deltaX;
         int y = height - (indxPos.x) * deltaY;
 
-        return new Vec2<Integer>(x + 2*l, y + 4*l);
+        int offsetFromLeft = 4*l;
+        int offsetFromTop = l;
+
+        return new Vec2<Integer>(x + offsetFromLeft, y + offsetFromTop);
     }
 }

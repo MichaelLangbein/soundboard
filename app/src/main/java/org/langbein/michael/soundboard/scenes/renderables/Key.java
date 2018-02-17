@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 import org.langbein.michael.soundboard.scenes.renderables.graphicsPrimitives.Hexagon;
 import org.langbein.michael.soundboard.scenes.renderables.graphicsPrimitives.Text;
 import org.langbein.michael.soundboard.utils.MusicUtils;
-import org.langbein.michael.soundboard.utils.SoundWrapper;
+import org.langbein.michael.soundboard.sound.SoundWrapper;
 
 
 public class Key implements Renderable, Touchable {
@@ -33,7 +33,7 @@ public class Key implements Renderable, Touchable {
         // Graphics
         hex = new Hexagon(posX, posY, len);
         text = new Text(posX, posY, String.valueOf(indx), 20);
-        a = 123;
+        a = 50;
         r =  (int)(255 * Math.random());
         g =  (int)(255 * Math.random());
         b =  (int)(255 * Math.random());
@@ -105,7 +105,7 @@ public class Key implements Renderable, Touchable {
     }
 
     private void lightsOut(){
-        setFillColor(123, r, g, b);
+        setFillColor(50, r, g, b);
     }
 
     private void startPlayingNote() {

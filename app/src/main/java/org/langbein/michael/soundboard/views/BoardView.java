@@ -7,10 +7,7 @@ import android.view.SurfaceView;
 
 import org.langbein.michael.soundboard.scenes.BoardScene;
 import org.langbein.michael.soundboard.scenes.SceneLogic;
-import org.langbein.michael.soundboard.utils.SoundWrapper;
-import org.langbein.michael.soundboard.workers.BoardRenderThread;
-import org.langbein.michael.soundboard.workers.SoundInThread;
-import org.langbein.michael.soundboard.workers.SoundOutThread;
+import org.langbein.michael.soundboard.sound.SoundWrapper;
 
 
 /**

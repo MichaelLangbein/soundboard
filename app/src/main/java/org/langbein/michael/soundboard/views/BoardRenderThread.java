@@ -1,4 +1,4 @@
-package org.langbein.michael.soundboard.workers;
+package org.langbein.michael.soundboard.views;
 
 import android.graphics.Canvas;
 import android.util.Log;
