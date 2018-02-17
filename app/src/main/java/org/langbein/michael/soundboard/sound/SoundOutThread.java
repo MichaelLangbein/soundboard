@@ -16,10 +16,12 @@ public class SoundOutThread extends Thread implements SoundOut {
     private AudioTrack track;
     private BlockingQueue<Short> prebuffer;
     private boolean running;
+    private boolean alive;
 
     public SoundOutThread() {
 
         running = true;
+        alive = true;
 
         sampleRate = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
 
@@ -45,9 +47,13 @@ public class SoundOutThread extends Thread implements SoundOut {
         Thread.currentThread().setName("SoundOutThread");
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         track.play();
-        while(running) {
-            playAndEmptyBuffer();
+        while(alive) {
+            if(running){
+                playAndEmptyBuffer();
+            }
         }
+        track.stop();
+        track.release();
     }
 
     private void playAndEmptyBuffer() {
@@ -103,8 +109,7 @@ public class SoundOutThread extends Thread implements SoundOut {
 
     public void close() {
         running = false;
-        track.stop();
-        track.release();
+        alive = false;
     }
 
 }

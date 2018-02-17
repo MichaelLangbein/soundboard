@@ -45,7 +45,7 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void stopRendering() {
-        brt.disableRendering();
+        brt.close();
         sw.stopThreads();
     }
 

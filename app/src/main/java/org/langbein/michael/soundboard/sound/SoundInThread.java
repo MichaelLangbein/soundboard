@@ -15,6 +15,7 @@ public class SoundInThread extends Thread implements SoundIn {
 
     private final int frequency;
     private boolean recording;
+    private boolean alive;
     private AudioRecord audioRecord;
     private short[] audiodata;
     private BlockingQueue<Short> inBuffer;
@@ -40,6 +41,7 @@ public class SoundInThread extends Thread implements SoundIn {
         inBuffer = new LinkedBlockingQueue<Short>();
 
         recording = true;
+        alive = true;
     }
 
 
@@ -54,7 +56,7 @@ public class SoundInThread extends Thread implements SoundIn {
         Thread.currentThread().setName("SoundInThread");
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         audioRecord.startRecording();
-        while (true) {
+        while (alive) {
             if(recording){
                 int readLength = audioRecord.read(audiodata, 0, audiodata.length);
                 for(int i = 0; i < readLength; i++){
@@ -62,7 +64,8 @@ public class SoundInThread extends Thread implements SoundIn {
                 }
             }
         }
-        //audioRecord.stop();
+        audioRecord.stop();
+        audioRecord.release();
     }
 
 
@@ -99,8 +102,7 @@ public class SoundInThread extends Thread implements SoundIn {
 
     public void close() {
         stopRecording();
-        audioRecord.stop();
-        audioRecord.release();
+        alive = false;
     }
 
     public void stopRecording() {
