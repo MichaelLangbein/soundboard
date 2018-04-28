@@ -4,7 +4,7 @@ package org.langbein.michael.soundboard.utils;
  * Created by michael on 17.02.18.
  */
 
-class Complex {
+public class Complex {
 
     private double real;
     private double compl;
@@ -14,24 +14,27 @@ class Complex {
         compl = c;
     }
 
-    public Complex times(Complex other) { // @TODO: das hier stimmt nicht...
-        return new Complex(real * other.getReal(), compl * other.getCompl());
+    public static Complex times(Complex first, Complex other) {
+        return new Complex( first.getReal() * other.getReal() - first.getCompl() * other.getCompl(),
+                            first.getReal() * other.getCompl() + first.getCompl() * other.getReal());
     }
 
-    public Complex plus(Complex other) {
-        return new Complex(real + other.getReal(), compl + other.getCompl());
+    public static Complex times(Complex first, double other) {
+        return new Complex(first.getReal() * other, first.getCompl() * other);
     }
 
-    public Complex minus(Complex other) {
-        return new Complex(real - other.getReal(), compl - other.getCompl());
+    public static Complex plus(Complex first, Complex other) {
+        return new Complex( first.getReal() + other.getReal(),
+                            first.getCompl() + other.getCompl());
+    }
+
+    public static Complex minus(Complex first, Complex other) {
+        return new Complex( first.getReal() - other.getReal(),
+                            first.getCompl() - other.getCompl());
     }
 
     public Complex conjugate() {
         return new Complex(real, - compl);
-    }
-
-    public Complex scale(double v) {
-        return new Complex(real * v, compl * v);
     }
 
     public double getReal(){
@@ -40,5 +43,24 @@ class Complex {
 
     public double getCompl() {
         return compl;
+    }
+
+    public double getAmplitude() {
+        return real + compl;
+    }
+
+    public static Complex exp(Complex c) {
+        double fac1 = Math.exp(c.getReal());
+        Complex fac2 = new Complex(Math.cos(c.getCompl()), Math.sin(c.getCompl()));
+        Complex result = times(fac2, fac1);
+        return result;
+    }
+
+    public static Complex[] transformToComplex(short[] shortArray) {
+        Complex[] result = new Complex[shortArray.length];
+        for(int n = 0; n<shortArray.length; n++){
+            result[n] = new Complex(shortArray[n], 0);
+        }
+        return result;
     }
 }

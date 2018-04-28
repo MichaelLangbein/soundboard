@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 
 import org.langbein.michael.soundboard.sound.SoundWrapper;
+import org.langbein.michael.soundboard.utils.Complex;
+import org.langbein.michael.soundboard.utils.FFT;
 import org.langbein.michael.soundboard.utils.Vec2;
 import org.langbein.michael.soundboard.utils.GridStateMachine;
 import org.langbein.michael.soundboard.utils.MusicUtils;
@@ -55,12 +57,23 @@ public class Board {
         // Step 1: get data from mic
         sw.fetchNewBatch(delta);
 
-        // Step 2: allow keys to modify data
+        // Step 2: analyse current batch and highlight keys accordingly
+        short[] currentBatch = sw.getCurrentBatch();
+        int batchSize = currentBatch.length;
+        Complex[] currentBatchComplex = Complex.transformToComplex(currentBatch);
+        Complex[] currentBatchAmplitudes = FFT.paddedFft(currentBatchComplex);
+        double[] currentBatchFrequencies = FFT.getFrequencies(batchSize, delta/batchSize);
+        double[] currentBatchIntensity = associateAmplitudeWithKeys(currentBatchAmplitudes, currentBatchFrequencies);
+        for(int k = 0; k<nKeys; k++){
+            keys[k].lightsOn(currentBatchIntensity[k]);
+        }
+
+        // Step 3: allow keys to modify data
         for(int k = 0; k < nKeys; k++) {
             keys[k].update(delta);
         }
 
-        // Step 3: send data to amp
+        // Step 4: send data to amp
         try {
             sw.flushCurrentBatch();
         } catch (Exception e) {
@@ -97,5 +110,19 @@ public class Board {
         int offsetFromTop = l;
 
         return new Vec2<Integer>(x + offsetFromLeft, y + offsetFromTop);
+    }
+
+
+
+    private double[] associateAmplitudeWithKeys(Complex[] currentBatchAmplitudes, double[] currentBatchFrequencies) {
+        double[] keyAmplitudes = new double[keys.length];
+        int F = currentBatchAmplitudes.length;
+
+        int currentKeyIndex = 0;
+        Key currentKey = keys[currentKeyIndex];
+        double currentKeyAmplitude = 0;
+        for(int f = 0; f<F; f++){
+            // TODO
+        }
     }
 }

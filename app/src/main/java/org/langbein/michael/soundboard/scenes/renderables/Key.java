@@ -100,12 +100,16 @@ public class Key implements Renderable, Touchable {
         hex.setFillColor(a, r, g, b);
     }
 
-    private void lightsOn(){
+    public void lightsOn(){
         setFillColor(255, r, g, b);
     }
 
+    public void lightsOn(double degree){
+        setFillColor((int)(degree * 255), r, g, b);
+    }
+
     private void lightsOut(){
-        setFillColor(50, r, g, b);
+        setFillColor(25, r, g, b);
     }
 
     private void startPlayingNote() {
@@ -119,5 +123,9 @@ public class Key implements Renderable, Touchable {
     private void stopPlayingNote() {
         playing = false;
         offset = 0;
+    }
+
+    public double getFrequency() {
+        return frq;
     }
 }

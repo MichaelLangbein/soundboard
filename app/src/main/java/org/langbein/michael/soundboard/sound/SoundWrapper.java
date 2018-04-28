@@ -60,6 +60,10 @@ public class SoundWrapper {
         currentBatch = si.takeFromBuffer(delta);
     }
 
+    public short[] getCurrentBatch() {
+        return currentBatch;
+    }
+
     public void addToCurrentBatch(short[] data) throws Exception {
 
         if(currentBatch == null) {
