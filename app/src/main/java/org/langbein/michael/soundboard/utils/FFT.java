@@ -83,18 +83,20 @@ public class FFT {
         // f = [0, 1, ...,   n/2-1,     -n/2, ..., -1] / (d*n)   if n is even
         // f = [0, 1, ..., (n-1)/2, -(n-1)/2, ..., -1] / (d*n)   if n is odd
         boolean even = (N%2 == 0);
-        double[] frequencies = new double[N];
+        double[] frequencies;
 
         if(even) {
+            frequencies = new double[N/2];
             for(int n = 0; n<(N/2 -1); n++) {
                 double f = n / (deltaTimestep * N);
                 frequencies[n] = f;
             }
-            for(int n = N/2; n>0; n--){
-
-            }
         } else {
-
+            frequencies = new double[(N-1)/2];
+            for(int n = 0; n<(N/2); n++){
+                double f = n / (deltaTimestep * N);
+                frequencies[n] = f;
+            }
         }
 
         return frequencies;

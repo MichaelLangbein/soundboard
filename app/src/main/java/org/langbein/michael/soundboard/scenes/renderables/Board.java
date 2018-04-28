@@ -113,16 +113,24 @@ public class Board {
     }
 
 
-
+    /*
+ * @TODO: Bisher ist Zuweisung f < key.getF . Besser: f < key.getF + delta
+ */
     private double[] associateAmplitudeWithKeys(Complex[] currentBatchAmplitudes, double[] currentBatchFrequencies) {
         double[] keyAmplitudes = new double[keys.length];
         int F = currentBatchAmplitudes.length;
 
         int currentKeyIndex = 0;
         Key currentKey = keys[currentKeyIndex];
-        double currentKeyAmplitude = 0;
         for(int f = 0; f<F; f++){
-            // TODO
+		double currentFrequency = currentBatchFrequencies[f];
+		while(currentFreqency < currentKey.getFreqency() && currentKeyIndex < keys.length){
+			currentKeyIndex += 1;
+			currentKey = keys[currentKeyIndex];
+		}
+		keyAmplitudes[currentKeyIndex] += currentBatchAmplitudes[f].getPower();
         }
+	
+	return keyAmplitudes;
     }
 }
