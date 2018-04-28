@@ -96,7 +96,7 @@ public class Board {
     }
 
 
-    public Vec2<Integer> getPos(int nr) {
+    private Vec2<Integer> getPos(int nr) {
         GridStateMachine gsm = new GridStateMachine();
         for(int i = 0; i < nr; i++) {
             gsm.oneStepFurther();

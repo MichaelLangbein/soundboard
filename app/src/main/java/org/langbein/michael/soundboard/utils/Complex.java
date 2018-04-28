@@ -45,8 +45,8 @@ public class Complex {
         return compl;
     }
 
-    public double getAmplitude() {
-        return real + compl;
+    public double getPower() {
+        return real*real + compl*compl;
     }
 
     public static Complex exp(Complex c) {

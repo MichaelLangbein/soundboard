@@ -2,7 +2,6 @@
 a dj keyboard
 
 Todos: 
- - fourier analysis of input
  - Aaudio for in- and output
  
  Links:

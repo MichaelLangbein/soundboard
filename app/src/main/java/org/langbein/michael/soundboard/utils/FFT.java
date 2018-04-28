@@ -66,29 +66,37 @@ public class FFT {
 
         Complex[] amplitudes = new Complex[N];
         for(int n = 0; n<(N/2); n++){
-            Complex exponent = new Complex(0, 2 * Math.PI * (n/N));
-            Complex wn   = Complex.exp(exponent);
-            Complex fac1 = ampsEven[n];
-            Complex fac2 = Complex.times(wn, ampsOdd[n]);
+            Complex exponent  = new Complex(0, 2 * Math.PI * (n/N));
+            Complex wn        = Complex.exp(exponent);
+            Complex fac1   = ampsEven[n];
+            Complex fac2   = Complex.times(wn, ampsOdd[n]);
             Complex amp_n  = Complex.plus(fac1, fac2);
             Complex amp_2n = Complex.minus(fac1, fac2);
-            amplitudes[n] = amp_n;
-            amplitudes[n + N/2] = amp_2n;
+            amplitudes[n]        = amp_n;
+            amplitudes[n + N/2]  = amp_2n;
         }
 
         return amplitudes;
     }
 
-    public static double[] getFrequencies(int N, double deltaTime) {
+    public static double[] getFrequencies(int N, double deltaTimestep) {
         // f = [0, 1, ...,   n/2-1,     -n/2, ..., -1] / (d*n)   if n is even
         // f = [0, 1, ..., (n-1)/2, -(n-1)/2, ..., -1] / (d*n)   if n is odd
         boolean even = (N%2 == 0);
         double[] frequencies = new double[N];
-        for(int n = 0; n<N; n++) {
-            int i = 1; // TODO
-            double f = i / (deltaTime * N);
-            frequencies[n] = f;
+
+        if(even) {
+            for(int n = 0; n<(N/2 -1); n++) {
+                double f = n / (deltaTimestep * N);
+                frequencies[n] = f;
+            }
+            for(int n = N/2; n>0; n--){
+
+            }
+        } else {
+
         }
+
         return frequencies;
     }
 }

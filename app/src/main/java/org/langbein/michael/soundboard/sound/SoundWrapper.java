@@ -25,7 +25,7 @@ public class SoundWrapper {
         switch(soundSource) {
             case SOUND_SOURCE_BLANK:
                 if(si.getClass() != BlankIn.class){
-                    Log.d("Basic", "Chanching sound in to BlankIn");
+                    Log.d("Basic", "Changing sound in to BlankIn");
                     si.close();
                     si = new BlankIn();
                     si.start();
