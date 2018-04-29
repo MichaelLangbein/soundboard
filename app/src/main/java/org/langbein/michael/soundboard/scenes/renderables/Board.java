@@ -60,13 +60,16 @@ public class Board {
         // Step 2: analyse current batch and highlight keys accordingly
         short[] currentBatch = sw.getCurrentBatch();
         int batchSize = currentBatch.length;
-        Complex[] currentBatchComplex = Complex.transformToComplex(currentBatch);
-        Complex[] currentBatchAmplitudes = FFT.paddedFft(currentBatchComplex);
-        double[] currentBatchFrequencies = FFT.getFrequencies(batchSize, delta/batchSize);
-        double[] currentBatchIntensity = associateAmplitudeWithKeys(currentBatchAmplitudes, currentBatchFrequencies);
-        for(int k = 0; k<nKeys; k++){
-            keys[k].lightsOn(currentBatchIntensity[k]);
+        if(batchSize>0){
+            Complex[] currentBatchComplex = Complex.transformToComplex(currentBatch);
+            Complex[] currentBatchAmplitudes = FFT.paddedFft(currentBatchComplex);
+            double[] currentBatchFrequencies = FFT.getFrequencies(batchSize, delta/batchSize);
+            double[] currentBatchIntensity = associateAmplitudeWithKeys(currentBatchAmplitudes, currentBatchFrequencies);
+            for(int k = 0; k<nKeys; k++){
+                keys[k].lightsOn(currentBatchIntensity[k]);
+            }
         }
+
 
         // Step 3: allow keys to modify data
         for(int k = 0; k < nKeys; k++) {
@@ -118,19 +121,28 @@ public class Board {
  */
     private double[] associateAmplitudeWithKeys(Complex[] currentBatchAmplitudes, double[] currentBatchFrequencies) {
         double[] keyAmplitudes = new double[keys.length];
-        int F = currentBatchAmplitudes.length;
+        double totalSum = 0;
+        int F = currentBatchFrequencies.length;
 
+        // Filling key's amplitudes by all proximate fourier-slots.
         int currentKeyIndex = 0;
         Key currentKey = keys[currentKeyIndex];
         for(int f = 0; f<F; f++){
-		double currentFrequency = currentBatchFrequencies[f];
-		while(currentFreqency < currentKey.getFreqency() && currentKeyIndex < keys.length){
-			currentKeyIndex += 1;
-			currentKey = keys[currentKeyIndex];
-		}
-		keyAmplitudes[currentKeyIndex] += currentBatchAmplitudes[f].getPower();
+            double currentFrequency = currentBatchFrequencies[f];
+            while(currentFrequency < currentKey.getFrequency() && currentKeyIndex < keys.length - 1){
+                currentKeyIndex += 1;
+                currentKey = keys[currentKeyIndex];
+            }
+            double power = currentBatchAmplitudes[f].getPower();
+            keyAmplitudes[currentKeyIndex] += power;
+            totalSum += power;
+        }
+
+        // Normalizing
+        for(int k = 0; k<keyAmplitudes.length; k++) {
+            keyAmplitudes[k] = keyAmplitudes[k]/totalSum;
         }
 	
-	return keyAmplitudes;
+	    return keyAmplitudes;
     }
 }
