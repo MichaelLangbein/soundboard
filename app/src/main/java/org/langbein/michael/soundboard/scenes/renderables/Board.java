@@ -1,6 +1,7 @@
 package org.langbein.michael.soundboard.scenes.renderables;
 
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import org.langbein.michael.soundboard.sound.SoundWrapper;
@@ -47,7 +48,7 @@ public class Board {
             Vec2<Integer> pos = getPos(k);
             float freq = MusicUtils.getNthTone(baseFreq, k);
             Key key = new Key(pos.x, pos.y, l, freq, k, sw);
-            key.setFillColor(123, (int)(255 * random()), (int)(255 * random()), (int)(255 * random()));
+            key.setFillColor(123, (int)(255 * Math.random()), (int)(255 * Math.random()), (int)(255 * Math.random()));
             keys[k] = key;
         }
     }
@@ -57,19 +58,22 @@ public class Board {
         // Step 1: get data from mic
         sw.fetchNewBatch(delta);
 
-        // Step 2: analyse current batch and highlight keys accordingly
+        // Step 2: analyse current batch and highlight keys accordingly .... shit; takes too long!
+        Log.d("update loop", "Now starting fft");
         short[] currentBatch = sw.getCurrentBatch();
         int batchSize = currentBatch.length;
+        Log.d("update loop", "Batch size: " + batchSize);
         if(batchSize>0){
             Complex[] currentBatchComplex = Complex.transformToComplex(currentBatch);
-            Complex[] currentBatchAmplitudes = FFT.paddedFft(currentBatchComplex);
+            Log.d("update loop", "Just did transform to complex");
+            Complex[] currentBatchAmplitudes = FFT.paddedFft(currentBatchComplex); // This is what takes too long. Needs 500MB memory, but only has 60 initially. Eventually causes IllegalStateException: Queue full
+            Log.d("update loop", "Just did fft");
             double[] currentBatchFrequencies = FFT.getFrequencies(batchSize, delta/batchSize);
             double[] currentBatchIntensity = associateAmplitudeWithKeys(currentBatchAmplitudes, currentBatchFrequencies);
             for(int k = 0; k<nKeys; k++){
                 keys[k].lightsOn(currentBatchIntensity[k]);
             }
         }
-
 
         // Step 3: allow keys to modify data
         for(int k = 0; k < nKeys; k++) {

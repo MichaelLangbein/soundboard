@@ -97,6 +97,9 @@ public class Key implements Renderable, Touchable {
     }
 
     public void setFillColor(int a, int r, int  g, int b){
+        this.r = r;
+        this.g = g;
+        this.b = b;
         hex.setFillColor(a, r, g, b);
     }
 
