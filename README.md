@@ -3,6 +3,7 @@ a dj keyboard
 
 Todos: 
  - Aaudio for in- and output
+ - Unittest for FFT to check performance and timing. 
  
  Links:
   - https://github.com/google/oboe/blob/master/GettingStarted.md
