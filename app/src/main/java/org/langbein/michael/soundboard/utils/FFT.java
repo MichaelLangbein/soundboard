@@ -66,7 +66,7 @@ public class FFT {
 
         Complex[] amplitudes = new Complex[N];
         for(int n = 0; n<(N/2); n++){
-            Complex exponent  = new Complex(0, 2 * Math.PI * (n/N));
+            Complex exponent  = new Complex(0, -2.0 * Math.PI * ((double)n/(double)N));
             Complex wn        = Complex.exp(exponent);
             Complex fac1   = ampsEven[n];
             Complex fac2   = Complex.times(wn, ampsOdd[n]);

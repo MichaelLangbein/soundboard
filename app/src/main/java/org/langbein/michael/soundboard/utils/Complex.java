@@ -14,6 +14,11 @@ public class Complex {
         compl = c;
     }
 
+    @Override
+    public String toString() {
+        return "(" + real + " i*" + compl + ")";
+    }
+
     public static Complex times(Complex first, Complex other) {
         return new Complex( first.getReal() * other.getReal() - first.getCompl() * other.getCompl(),
                             first.getReal() * other.getCompl() + first.getCompl() * other.getReal());
