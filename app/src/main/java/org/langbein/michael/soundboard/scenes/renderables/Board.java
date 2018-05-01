@@ -58,22 +58,11 @@ public class Board {
         // Step 1: get data from mic
         sw.fetchNewBatch(delta);
 
-        // Step 2: analyse current batch and highlight keys accordingly .... shit; takes too long!
-        Log.d("update loop", "Now starting fft");
+        // Step 2: analyse current batch and highlight keys accordingly
         short[] currentBatch = sw.getCurrentBatch();
-        int batchSize = currentBatch.length;
-        Log.d("update loop", "Batch size: " + batchSize);
-        if(batchSize>0){
-            Complex[] currentBatchComplex = Complex.transformToComplex(currentBatch);
-            Log.d("update loop", "Just did transform to complex");
-            Complex[] currentBatchAmplitudes = FFT.paddedFft(currentBatchComplex); // This is what takes too long. Needs 500MB memory, but only has 60 initially. Eventually causes IllegalStateException: Queue full
-            Log.d("update loop", "Just did fft");
-            double[] currentBatchFrequencies = FFT.getFrequencies(batchSize, delta/batchSize);
-            double[] currentBatchIntensity = associateAmplitudeWithKeys(currentBatchAmplitudes, currentBatchFrequencies);
-            for(int k = 0; k<nKeys; k++){
-                keys[k].lightsOn(currentBatchIntensity[k]);
-            }
-        }
+        // analyseInputWithFFT(currentBatch, delta); // <---- too slow!
+        // analyseInputOnKeys(currentBatch); // <---- better, but still too slow!
+
 
         // Step 3: allow keys to modify data
         for(int k = 0; k < nKeys; k++) {
@@ -120,9 +109,52 @@ public class Board {
     }
 
 
+    private void analyseInputOnKeys(short[] currentBatch) {
+
+        int batchSize = currentBatch.length;
+        double[] rawAmps = new double[keys.length];
+        if(batchSize > 0){
+
+            double ampTotal = 0.0;
+            for(int k = 0; k < keys.length; k++) {
+                double amp = keys[k].ownAmplitude(currentBatch);
+                rawAmps[k] = amp;
+                ampTotal += amp;
+            }
+
+            double ampNormed;
+            for(int k = 0; k < keys.length; k++) {
+                ampNormed = 0;
+                if(ampTotal > 0.0){
+                    ampNormed = rawAmps[k] / ampTotal;
+                }
+                keys[k].lightsOn(ampNormed);
+                Log.d("update loop", "Key with frequency "+ keys[k].getFrequency() +" has amplitude "+ ampNormed);
+            }
+        }
+    }
+
+    private void analyseInputWithFFT(short[] currentBatch, long delta) {
+
+        int batchSize = currentBatch.length;
+        double[] rawAmps = new double[keys.length];
+
+        if(batchSize>0){
+            Complex[] currentBatchComplex = Complex.transformToComplex(currentBatch);
+            Log.d("update loop", "Just did transform to complex");
+            Complex[] currentBatchAmplitudes = FFT.paddedFft(currentBatchComplex); // This is what takes too long. Needs 500MB memory, but only has 60 initially. Eventually causes IllegalStateException: Queue full
+            Log.d("update loop", "Just did fft");
+            double[] currentBatchFrequencies = FFT.getFrequencies(batchSize, delta/batchSize);
+            double[] currentBatchIntensity = associateAmplitudeWithKeys(currentBatchAmplitudes, currentBatchFrequencies);
+            for(int k = 0; k<nKeys; k++){
+                keys[k].lightsOn(currentBatchIntensity[k]);
+            }
+        }
+    }
+
     /*
- * @TODO: Bisher ist Zuweisung f < key.getF . Besser: f < key.getF + delta
- */
+     * @TODO: Bisher ist Zuweisung f < key.getF . Besser: f < key.getF + delta
+     */
     private double[] associateAmplitudeWithKeys(Complex[] currentBatchAmplitudes, double[] currentBatchFrequencies) {
         double[] keyAmplitudes = new double[keys.length];
         double totalSum = 0;
@@ -146,7 +178,7 @@ public class Board {
         for(int k = 0; k<keyAmplitudes.length; k++) {
             keyAmplitudes[k] = keyAmplitudes[k]/totalSum;
         }
-	
-	    return keyAmplitudes;
+
+        return keyAmplitudes;
     }
 }

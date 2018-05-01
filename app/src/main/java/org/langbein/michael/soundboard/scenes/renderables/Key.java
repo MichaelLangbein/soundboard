@@ -131,4 +131,12 @@ public class Key implements Renderable, Touchable {
     public double getFrequency() {
         return frq;
     }
+
+    public double ownAmplitude(short[] currentBatch) {
+        double amp = 0;
+        for(int t = 0; t < currentBatch.length; t++) {
+            amp += (double)currentBatch[t] * Math.cos(2.0 * Math.PI * frq * t);
+        }
+        return amp;
+    }
 }
