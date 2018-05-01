@@ -62,7 +62,10 @@ public class Board {
         short[] currentBatch = sw.getCurrentBatch();
         // analyseInputWithFFT(currentBatch, delta); // <---- too slow!
         // analyseInputOnKeys(currentBatch); // <---- better, but still too slow!
-
+        if(currentBatch.length > 0) {
+            short[] smallerBatch = downsample(currentBatch, 100);
+            analyseInputOnKeys(smallerBatch);
+        }
 
         // Step 3: allow keys to modify data
         for(int k = 0; k < nKeys; k++) {
@@ -77,6 +80,8 @@ public class Board {
         }
 
     }
+
+
 
     public boolean onTouch(MotionEvent event) {
         for(int k = 0; k < nKeys; k++) {
@@ -108,6 +113,16 @@ public class Board {
         return new Vec2<Integer>(x + offsetFromLeft, y + offsetFromTop);
     }
 
+    private short[] downsample(short[] currentBatch, int every) {
+        int N = currentBatch.length;
+        short[] out = new short[N / every];
+        int outindex = 0;
+        for(int i = 0; i<(N-every); i+=every){
+            out[outindex] = currentBatch[i];
+            outindex += 1;
+        }
+        return out;
+    }
 
     private void analyseInputOnKeys(short[] currentBatch) {
 
