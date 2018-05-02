@@ -65,9 +65,10 @@ public class Board {
 
         // Step 2: analyse current batch and highlight keys accordingly
         short[] currentBatch = sw.getCurrentBatch();
+        int sampleRate = sw.getSampleRate();
         if(currentBatch.length > 0) {
             short[] smallerBatch = FrequencyAnalysis.downsample(currentBatch, 100);
-            double[] lights = FrequencyAnalysis.analyseInputOnKeys(smallerBatch, keyFrequencies);
+            double[] lights = FrequencyAnalysis.analyseInputOnKeys(smallerBatch, keyFrequencies, sampleRate);
             for(int k = 0; k < nKeys; k++) {
                 keys[k].lightsOn(lights[k]);
             }

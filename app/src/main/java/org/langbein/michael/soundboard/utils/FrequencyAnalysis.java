@@ -9,14 +9,14 @@ public class FrequencyAnalysis {
      * @param keyFrequencies
      * @return
      */
-    public static double[] analyseInputOnKeys(short[] currentBatch, float[] keyFrequencies) {
+    public static double[] analyseInputOnKeys(short[] currentBatch, float[] keyFrequencies, int sampleRate) {
 
         int batchSize = currentBatch.length;
 
         double[] rawAmps = new double[keyFrequencies.length];
         for(int k = 0; k < keyFrequencies.length; k++) {
             float frq = keyFrequencies[k];
-            double amp = innerProduct(currentBatch, frq);
+            double amp = innerProduct(currentBatch, frq, sampleRate);
             rawAmps[k] = amp;
         }
 
@@ -36,10 +36,11 @@ public class FrequencyAnalysis {
      * @param frq
      * @return
      */
-    private static double innerProduct(short[] currentBatch, float frq) {
+    private static double innerProduct(short[] currentBatch, float frq, int sampleRate) {
         double amp = 0;
+        double deltaT = 1.0 / (double) sampleRate;
         for(int t = 0; t < currentBatch.length; t++) {
-            amp += (double)currentBatch[t] * Math.cos(2.0 * Math.PI * frq * t);
+            amp += (double)currentBatch[t] * Math.cos(2.0 * Math.PI * frq * deltaT * t);
         }
         return amp;
     }

@@ -92,20 +92,20 @@ public class SoundWrapper {
     }
 
 
-    public int getBufferSize() throws Exception {
+    public int getBufferSize() {
 
         if(currentBatch == null) {
-            throw new Exception("There is currently no batch of sounddata. You must first call fetchNewBatch().");
+            return 0;
         }
 
         return currentBatch.length;
     }
 
 
-    public int getSampleRate() throws Exception {
+    public int getSampleRate() {
 
         if(currentBatch == null) {
-            throw new Exception("There is currently no batch of sounddata. You must first call fetchNewBatch().");
+            return 0;
         }
 
         return so.getSampleRate();
