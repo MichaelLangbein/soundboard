@@ -12,8 +12,8 @@ public class FrequencyAnalysis {
     public static double[] analyseInputOnKeys(short[] currentBatch, float[] keyFrequencies) {
 
         int batchSize = currentBatch.length;
-        double[] rawAmps = new double[keyFrequencies.length];
 
+        double[] rawAmps = new double[keyFrequencies.length];
         for(int k = 0; k < keyFrequencies.length; k++) {
             float frq = keyFrequencies[k];
             double amp = innerProduct(currentBatch, frq);
@@ -31,7 +31,7 @@ public class FrequencyAnalysis {
     }
 
     /**
-     * Inner product with frequnecy.
+     * Inner product with frequency.
      * @param currentBatch
      * @param frq
      * @return
@@ -64,7 +64,7 @@ public class FrequencyAnalysis {
         return currentBatchIntensity;
     }
 
-    
+
     public static short[] downsample(short[] currentBatch, int every) {
         int N = currentBatch.length;
         short[] out = new short[N / every];
