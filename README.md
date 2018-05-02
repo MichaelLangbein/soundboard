@@ -3,9 +3,7 @@ a dj keyboard
 
 Todos: 
  - Aaudio for in- and output
- - Faster FFT implementations precalculate trig-functions. For that, the batch-size must allways be the same. 
-   - Get from input allways a power of 2
-   - get one of these precalculated fft-algorithms.
+ - Unittest: try different inputs and check that right keys are highlighted. 
  
  Links:
   - https://github.com/google/oboe/blob/master/GettingStarted.md
