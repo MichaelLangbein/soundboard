@@ -46,10 +46,10 @@ public class FrequencyAnalysis {
             double pt = angularVelocity * t;
             double sinComp = btch * Math.sin(pt);
             double cosComp = btch * Math.cos(pt);
-            double totPt = Math.abs(sinComp) + Math.abs(cosComp);
-            amp += totPt * totPt;
+            amp += sinComp + cosComp;
         }
-        return amp;
+        double ampNormed = amp / (double)currentBatch.length;
+        return ampNormed;
     }
 
     /**

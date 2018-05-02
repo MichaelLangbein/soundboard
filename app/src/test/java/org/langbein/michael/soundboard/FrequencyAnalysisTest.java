@@ -50,7 +50,7 @@ public class FrequencyAnalysisTest {
         float[] frequencies = createFrequencies(220, 49);
         int sampleRate = 48000;
 
-        short[] middleALittleOffSample = MusicUtils.makeWave(sampleRate/2, 451, Short.MAX_VALUE/2.0, sampleRate, 1.1);
+        short[] middleALittleOffSample = MusicUtils.makeWave(sampleRate/2, 451, Short.MAX_VALUE/2.0, sampleRate, 0);
         double[] lights = FrequencyAnalysis.analyseInputOnKeys(middleALittleOffSample, frequencies, sampleRate);
         int maxIndex = getIndexMaximum(lights);
         assertTrue("Oh oh! MaxIndex für middleALittleOffSample ist nicht 12, sondern " + maxIndex, maxIndex == 12);
@@ -58,17 +58,82 @@ public class FrequencyAnalysisTest {
 
     @Test
     public void testChangeDuringSample() {
-        // TODO
+        float[] frequencies = createFrequencies(220, 49);
+        int sampleRate = 48000;
+
+        short[] midASample = MusicUtils.makeWave(3*sampleRate/4, 440.00, Short.MAX_VALUE/2.0, sampleRate, 0);
+        short[] midHSample = MusicUtils.makeWave(1*sampleRate/4, 493.88, Short.MAX_VALUE/2.0, sampleRate, 0);
+        short[] sample = concatArrays(midASample, midHSample);
+
+        double[] lights = FrequencyAnalysis.analyseInputOnKeys(sample, frequencies, sampleRate);
+        int indxMax = getIndexMaximum(lights);
+        int indxSecond = getIndexMaximum(spliceOutIndex(lights, indxMax));
+        assertTrue("Oh oh! Longer tone is not 12, but " + indxMax, indxMax == 12);
+        assertTrue("Oh oh! Shorter tone is not 14, but " + indxSecond, indxSecond == 14);
     }
 
     @Test
     public void testChord() {
-        // TODO
+        float[] frequencies = createFrequencies(220, 49);
+        int sampleRate = 48000;
+
+        short[] grund = MusicUtils.makeWave(sampleRate/2, 440.00, Short.MAX_VALUE/2.0, sampleRate, 0);
+        short[] terz  = MusicUtils.makeWave(sampleRate/2, 523.25, Short.MAX_VALUE/2.0, sampleRate, 0);
+        short[] quint = MusicUtils.makeWave(sampleRate/2, 587.33, Short.MAX_VALUE/2.0, sampleRate, 0);
+        short[] all = addArrays(grund, terz);
+        all = addArrays(all, quint);
+
+        double[] lights = FrequencyAnalysis.analyseInputOnKeys(all, frequencies, sampleRate);
+        printArray(lights);
     }
 
     @Test
     public void testMultiple() {
         // TODO
+    }
+
+    private double[] spliceOutIndex(double[] array, int index) {
+        double[] out = new double[array.length - 1];
+
+        int outIndex = 0;
+        for(int inIndex = 0; inIndex < array.length; inIndex++) {
+            if(inIndex == index) continue;
+            out[outIndex] = array[inIndex];
+        }
+
+        return out;
+    }
+
+    private short[] addArrays(short[] arr1, short[] arr2) {
+        int len = Math.max(arr1.length, arr2.length);
+        short[] out = new short[len];
+
+        for(int k = 0; k<len; k++) {
+            short a = k < arr1.length ? arr1[k] : 0;
+            short b = k < arr2.length ? arr2[k] : 0;
+            out[k] = (short) (a + b);
+        }
+
+        return out;
+    }
+
+    private short[] concatArrays(short[] arr1, short[] arr2) {
+        int len = arr1.length + arr2.length;
+        short[] out = new short[len];
+
+        int indxOut = 0;
+
+        for(int indx1 = 0; indx1 < arr1.length; indx1++) {
+            out[indxOut] = arr1[indx1];
+            indxOut += 1;
+        }
+
+        for(int indx2 = 0; indx2 < arr2.length; indx2++) {
+            out[indxOut] = arr2[indx2];
+            indxOut += 1;
+        }
+
+        return out;
     }
 
     private int getIndexMaximum(double[] array) {
@@ -89,5 +154,11 @@ public class FrequencyAnalysisTest {
             keyFrequencies[k] = MusicUtils.getNthTone(baseFreq, k);
         }
         return keyFrequencies;
+    }
+
+    private void printArray(double[] array) {
+        for(int k = 0; k < array.length; k++){
+            System.out.println(k + ": " + array[k]);
+        }
     }
 }
