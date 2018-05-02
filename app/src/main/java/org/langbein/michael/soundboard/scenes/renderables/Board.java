@@ -130,19 +130,14 @@ public class Board {
         double[] rawAmps = new double[keys.length];
         if(batchSize > 0){
 
-            double ampTotal = 0.0;
             for(int k = 0; k < keys.length; k++) {
                 double amp = keys[k].ownAmplitude(currentBatch);
                 rawAmps[k] = amp;
-                ampTotal += amp;
             }
 
-            double ampNormed;
+            double normalizer = batchSize * 20;
             for(int k = 0; k < keys.length; k++) {
-                ampNormed = 0;
-                if(ampTotal > 0.0){
-                    ampNormed = rawAmps[k] / ampTotal;
-                }
+                double ampNormed = rawAmps[k] / normalizer;
                 keys[k].lightsOn(ampNormed);
                 Log.d("update loop", "Key with frequency "+ keys[k].getFrequency() +" has amplitude "+ ampNormed);
             }

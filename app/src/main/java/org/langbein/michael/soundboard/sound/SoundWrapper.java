@@ -32,10 +32,10 @@ public class SoundWrapper {
                 }
                 break;
             case SOUND_SOURCE_MIC:
-                if(si.getClass() != SoundInThread.class){
-                    Log.d("Basic", "Changing sound in to SoundInThread");
+                if(si.getClass() != SoundInMicThread.class){
+                    Log.d("Basic", "Changing sound in to SoundInMicThread");
                     si.close();
-                    si = new SoundInThread();
+                    si = new SoundInMicThread();
                     si.start();
                 }
                 break;

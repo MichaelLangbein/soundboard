@@ -11,7 +11,7 @@ import android.util.Log;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class SoundInThread extends Thread implements SoundIn {
+public class SoundInMicThread extends Thread implements SoundIn {
 
     private final int frequency;
     private boolean recording;
@@ -20,7 +20,7 @@ public class SoundInThread extends Thread implements SoundIn {
     private short[] audiodata;
     private BlockingQueue<Short> inBuffer;
 
-    public SoundInThread() {
+    public SoundInMicThread() {
 
         frequency = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
 
@@ -53,7 +53,7 @@ public class SoundInThread extends Thread implements SoundIn {
          * offer <---------- special value
          * offer(long) <---- timeout
          */
-        Thread.currentThread().setName("SoundInThread");
+        Thread.currentThread().setName("SoundInMicThread");
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         audioRecord.startRecording();
         while (alive) {
@@ -87,12 +87,12 @@ public class SoundInThread extends Thread implements SoundIn {
         if(l < n){ // If we have been asked for more data than there is, give all we have
             data = new short[l];
             for(int i = 0; i < l; i++) {
-                data[i] = (short)(40 * inBuffer.remove());
+                data[i] = inBuffer.remove();
             }
         } else { // Otherwise, give just enough
             data = new short[n];
             for(int i = 0; i < n; i++) {
-                data[i] = (short)(40 * inBuffer.remove());
+                data[i] = inBuffer.remove();
             }
         }
 
