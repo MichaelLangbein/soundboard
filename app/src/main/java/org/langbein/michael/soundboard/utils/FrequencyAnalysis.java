@@ -32,6 +32,7 @@ public class FrequencyAnalysis {
 
     /**
      * Inner product with frequency.
+     * Not really inner product, though.
      * @param currentBatch
      * @param frq
      * @return
@@ -39,8 +40,14 @@ public class FrequencyAnalysis {
     private static double innerProduct(short[] currentBatch, float frq, int sampleRate) {
         double amp = 0;
         double deltaT = 1.0 / (double) sampleRate;
+        double angularVelocity = 2.0 * Math.PI * frq * deltaT;
         for(int t = 0; t < currentBatch.length; t++) {
-            amp += (double)currentBatch[t] * Math.cos(2.0 * Math.PI * frq * deltaT * t);
+            double btch = (double)currentBatch[t];
+            double pt = angularVelocity * t;
+            double sinComp = btch * Math.sin(pt);
+            double cosComp = btch * Math.cos(pt);
+            double totPt = Math.abs(sinComp) + Math.abs(cosComp);
+            amp += totPt * totPt;
         }
         return amp;
     }
