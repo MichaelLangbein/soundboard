@@ -69,8 +69,9 @@ public class Board {
         if(currentBatch.length > 0) {
             short[] smallerBatch = FrequencyAnalysis.downsample(currentBatch, 100);
             double[] lights = FrequencyAnalysis.analyseInputOnKeys(smallerBatch, keyFrequencies, sampleRate);
+            double[] lightsP = FrequencyAnalysis.postprocess(lights);
             for(int k = 0; k < nKeys; k++) {
-                keys[k].lightsOn(lights[k]);
+                keys[k].lightsOn(lightsP[k] / 30.0);
             }
         }
 

@@ -3,6 +3,36 @@ package org.langbein.michael.soundboard.utils;
 
 public class FrequencyAnalysis {
 
+
+    /**
+     * The normal fourier analysis is oftentainted by weaker, irrelevant signals.
+     * For that reason, we filter out all but  the strongest two amplitudes.
+     * Alternatively, we could have chosen a high-pass amplitude.
+     * @param data
+     * @return
+     */
+    public static double[] postprocess(double[] data) {
+        int maxIndx = 0;
+        int secIndx = 0;
+
+        for(int k = 0; k < data.length; k++)  {
+            if(data[k] > data[maxIndx]){
+                secIndx = maxIndx;
+                maxIndx = k;
+            } else if (data[k] > data[secIndx]) {
+                secIndx = k;
+            }
+        }
+
+        for(int k = 0; k<data.length; k++){
+            if(k != maxIndx &&  k != secIndx){
+                data[k] = 0;
+            }
+        }
+
+        return data;
+    }
+
     /**
      * Analyse the relative brightness of every key by calculating the inner product with the keys frequency
      * @param currentBatch
@@ -21,7 +51,7 @@ public class FrequencyAnalysis {
         }
 
         double[] normedAmps = new double[keyFrequencies.length];
-        double normalizer = batchSize * 20;
+        double normalizer = batchSize;
         for(int k = 0; k < keyFrequencies.length; k++) {
             double ampNormed = rawAmps[k] / normalizer;
             normedAmps[k] = ampNormed;
@@ -38,7 +68,8 @@ public class FrequencyAnalysis {
      * @return
      */
     private static double innerProduct(short[] currentBatch, float frq, int sampleRate) {
-        double amp = 0;
+        double ampSinPart = 0;
+        double ampCosPart = 0;
         double deltaT = 1.0 / (double) sampleRate;
         double angularVelocity = 2.0 * Math.PI * frq * deltaT;
         for(int t = 0; t < currentBatch.length; t++) {
@@ -46,10 +77,12 @@ public class FrequencyAnalysis {
             double pt = angularVelocity * t;
             double sinComp = btch * Math.sin(pt);
             double cosComp = btch * Math.cos(pt);
-            amp += sinComp + cosComp;
+            ampSinPart += sinComp;
+            ampCosPart += cosComp;
         }
-        double ampNormed = amp / (double)currentBatch.length;
-        return ampNormed;
+        double ampSinPartNormed = ampSinPart / (double) currentBatch.length;
+        double ampCosPartNormed = ampCosPart / (double) currentBatch.length;
+        return (ampSinPartNormed*ampSinPartNormed + ampCosPartNormed*ampCosPartNormed);
     }
 
     /**

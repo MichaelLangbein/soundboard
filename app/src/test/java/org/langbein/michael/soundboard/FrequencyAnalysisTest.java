@@ -1,11 +1,11 @@
 package org.langbein.michael.soundboard;
 
-import android.media.AudioManager;
-import android.media.AudioTrack;
-
 import org.junit.Test;
 import org.langbein.michael.soundboard.utils.FrequencyAnalysis;
 import org.langbein.michael.soundboard.utils.MusicUtils;
+
+import java.util.Arrays;
+import java.util.Comparator;
 
 import static org.junit.Assert.assertTrue;
 
@@ -62,12 +62,13 @@ public class FrequencyAnalysisTest {
         int sampleRate = 48000;
 
         short[] midASample = MusicUtils.makeWave(3*sampleRate/4, 440.00, Short.MAX_VALUE/2.0, sampleRate, 0);
-        short[] midHSample = MusicUtils.makeWave(1*sampleRate/4, 493.88, Short.MAX_VALUE/2.0, sampleRate, 0);
+        short[] midHSample = MusicUtils.makeWave(sampleRate /4, 493.88, Short.MAX_VALUE/2.0, sampleRate, 0);
         short[] sample = concatArrays(midASample, midHSample);
 
         double[] lights = FrequencyAnalysis.analyseInputOnKeys(sample, frequencies, sampleRate);
-        int indxMax = getIndexMaximum(lights);
-        int indxSecond = getIndexMaximum(spliceOutIndex(lights, indxMax));
+        Integer[] indices = indicesFromHighToLow(lights);
+        Integer indxMax = indices[0];
+        Integer indxSecond = indices[1];
         assertTrue("Oh oh! Longer tone is not 12, but " + indxMax, indxMax == 12);
         assertTrue("Oh oh! Shorter tone is not 14, but " + indxSecond, indxSecond == 14);
     }
@@ -78,18 +79,55 @@ public class FrequencyAnalysisTest {
         int sampleRate = 48000;
 
         short[] grund = MusicUtils.makeWave(sampleRate/2, 440.00, Short.MAX_VALUE/2.0, sampleRate, 0);
-        short[] terz  = MusicUtils.makeWave(sampleRate/2, 523.25, Short.MAX_VALUE/2.0, sampleRate, 0);
-        short[] quint = MusicUtils.makeWave(sampleRate/2, 587.33, Short.MAX_VALUE/2.0, sampleRate, 0);
+        short[] terz  = MusicUtils.makeWave(sampleRate/2, 523.25, Short.MAX_VALUE/3.0, sampleRate, 0);
+        short[] quint = MusicUtils.makeWave(sampleRate/2, 587.33, Short.MAX_VALUE/4.0, sampleRate, 0);
         short[] all = addArrays(grund, terz);
         all = addArrays(all, quint);
 
         double[] lights = FrequencyAnalysis.analyseInputOnKeys(all, frequencies, sampleRate);
-        printArray(lights);
+        Integer[] indices = indicesFromHighToLow(lights);
+        Integer indxMax = indices[0];
+        Integer indxSec = indices[1];
+        Integer indxTrd = indices[2];
+        assertTrue("Grundton ist nicht 12, sondern " + indxMax, indxMax == 12);
+        assertTrue("Terz ist nicht 15, sondern " + indxSec, indxSec == 15);
+        assertTrue("Quint ist nicht 15, sondern " + indxTrd, indxTrd == 17);
     }
 
     @Test
     public void testMultiple() {
         // TODO
+    }
+
+    private Integer[] indicesFromHighToLow(double[] data) {
+        DoubleIndexSorter dis = new DoubleIndexSorter(data);
+        Integer[] indexArray = dis.createIndexArray();
+        Arrays.sort(indexArray, dis);
+        return indexArray;
+    }
+
+    private class DoubleIndexSorter implements Comparator<Integer> {
+
+        private final double[] data;
+
+        DoubleIndexSorter(double[] data){
+            this.data = data;
+        }
+
+        Integer[] createIndexArray() {
+            Integer[] ia = new Integer[data.length];
+            for(int k = 0; k < data.length; k++) {
+                ia[k] = k;
+            }
+            return ia;
+        }
+
+        @Override
+        public int compare(Integer i1, Integer i2) {
+            if( data[i1] > data[i2] ) return -1;
+            else if (data[i1] < data[i2]) return 1;
+            else return 0;
+        }
     }
 
     private double[] spliceOutIndex(double[] array, int index) {
