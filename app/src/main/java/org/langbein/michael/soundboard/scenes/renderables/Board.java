@@ -1,12 +1,9 @@
 package org.langbein.michael.soundboard.scenes.renderables;
 
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import org.langbein.michael.soundboard.sound.SoundWrapper;
-import org.langbein.michael.soundboard.utils.Complex;
-import org.langbein.michael.soundboard.utils.FFT;
 import org.langbein.michael.soundboard.utils.FrequencyAnalysis;
 import org.langbein.michael.soundboard.utils.Vec2;
 import org.langbein.michael.soundboard.utils.GridStateMachine;
@@ -66,9 +63,10 @@ public class Board {
         // Step 2: analyse current batch and highlight keys accordingly
         short[] currentBatch = sw.getCurrentBatch();
         int sampleRate = sw.getSampleRate();
+        int thinning = 100;
         if(currentBatch.length > 0) {
-            short[] smallerBatch = FrequencyAnalysis.downsample(currentBatch, 100);
-            double[] lights = FrequencyAnalysis.analyseInputOnKeys(smallerBatch, keyFrequencies, sampleRate);
+            short[] smallerBatch = FrequencyAnalysis.downsample(currentBatch, thinning);
+            double[] lights = FrequencyAnalysis.analyseInputOnKeys(smallerBatch, keyFrequencies, sampleRate/thinning);
             double[] lightsP = FrequencyAnalysis.postprocess(lights);
             for(int k = 0; k < nKeys; k++) {
                 keys[k].lightsOn(lightsP[k] / 30.0);
