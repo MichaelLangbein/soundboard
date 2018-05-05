@@ -51,7 +51,7 @@ public class FrequencyAnalysis {
         }
 
         double[] normedAmps = new double[keyFrequencies.length];
-        double normalizer = batchSize;
+        double normalizer = batchSize * 20;
         for(int k = 0; k < keyFrequencies.length; k++) {
             double ampNormed = rawAmps[k] / normalizer;
             normedAmps[k] = ampNormed;

@@ -1,5 +1,6 @@
 package org.langbein.michael.soundboard;
 
+import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -26,10 +27,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sw = new SoundWrapper();
+        sw = new SoundWrapper(this);
         boardView = new BoardView(this, sw);
         setContentView(boardView);
         boardView.startRendering();
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

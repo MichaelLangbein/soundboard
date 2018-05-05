@@ -1,5 +1,6 @@
 package org.langbein.michael.soundboard.sound;
 
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -18,7 +19,7 @@ public class SoundOutThread extends Thread implements SoundOut {
     private boolean running;
     private boolean alive;
 
-    public SoundOutThread() {
+    public SoundOutThread(Context context) {
 
         running = true;
         alive = true;

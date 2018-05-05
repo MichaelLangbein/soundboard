@@ -59,7 +59,10 @@ public class Hexagon implements TwoDimObject {
         float y = me.getY();
         double dist = Math.sqrt(Math.pow((x - center.x), 2) + Math.pow((y - center.y), 2));
 
-        if(dist < 1.3*sideLength){
+        // if we push hard, we want the touch to be closer
+        double weightedDistance = dist - me.getPressure() * 20;
+
+        if( weightedDistance < 1.3*sideLength ){
             inside = true;
         }
 

@@ -1,5 +1,6 @@
 package org.langbein.michael.soundboard.sound;
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 
@@ -11,7 +12,7 @@ public class BlankIn implements SoundIn {
 
     private final int sampleRate;
 
-    public BlankIn() {
+    public BlankIn(Context context) {
         sampleRate = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
     }
 

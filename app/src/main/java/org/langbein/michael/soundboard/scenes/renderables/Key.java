@@ -49,7 +49,6 @@ public class Key implements Renderable, Touchable {
     @Override
     public void update(long delta) {
         if(playing) {
-            Log.d("Basic", "Note " + frq + " now adding data to prebuffer.");
 
             int bufferSize, sampleRate;
             short[] data;
@@ -78,10 +77,12 @@ public class Key implements Renderable, Touchable {
 
     @Override
     public void onTouch(MotionEvent event) {
+        // TODO: use event.getAction() um bei Ende der Bewegung den sound wieder auszuschalten.
         if(hex.isInsideBounds(event)) {
             switch(event.getFlags()){
                 case MotionEvent.ACTION_DOWN:
-                    lightsOn();
+                    double intensity = event.getPressure();
+                    lightsOn(intensity);
                     startPlayingNote();
                     break;
                 case MotionEvent.ACTION_UP:

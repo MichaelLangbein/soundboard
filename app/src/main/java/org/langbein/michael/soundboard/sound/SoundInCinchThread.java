@@ -1,26 +1,38 @@
 package org.langbein.michael.soundboard.sound;
 
 
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
+import android.os.Build;
 import android.util.Log;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class SoundInMicThread extends Thread implements SoundIn {
+public class SoundInCinchThread extends Thread implements SoundIn {
+
 
     private final int frequency;
+    private final Context context;
     private boolean recording;
     private boolean alive;
     private AudioRecord audioRecord;
     private short[] audiodata;
     private BlockingQueue<Short> inBuffer;
 
-    public SoundInMicThread() {
+    public SoundInCinchThread(Context context) {
+
+        this.context = context;
+        // TODO: hiermit soll mic asugeschaltet werden damit keine nebengeräusche. aber funzt nicht.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            AudioManager am = context.getSystemService(AudioManager.class);
+            am.setMicrophoneMute(true);
+        }
+
 
         frequency = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
 
@@ -42,6 +54,8 @@ public class SoundInMicThread extends Thread implements SoundIn {
 
         recording = true;
         alive = true;
+
+
     }
 
 
@@ -53,7 +67,7 @@ public class SoundInMicThread extends Thread implements SoundIn {
          * offer <---------- special value
          * offer(long) <---- timeout
          */
-        Thread.currentThread().setName("SoundInMicThread");
+        Thread.currentThread().setName("SoundInCinchThread");
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         audioRecord.startRecording();
         while (alive) {

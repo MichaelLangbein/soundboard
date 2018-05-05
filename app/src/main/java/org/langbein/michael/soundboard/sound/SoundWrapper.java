@@ -1,6 +1,7 @@
 package org.langbein.michael.soundboard.sound;
 
 import android.util.Log;
+import android.content.Context;
 
 /**
  * Created by michael on 17.02.18.
@@ -8,6 +9,7 @@ import android.util.Log;
 
 public class SoundWrapper {
 
+    private final Context context;
     private SoundOut so;
     private SoundIn si;
     private short[] currentBatch;
@@ -16,9 +18,10 @@ public class SoundWrapper {
     public static final int SOUND_SOURCE_MIC = 2;
     public static final int SOUND_TARGET_DEFAULT = 10;
 
-    public SoundWrapper() {
-        this.si = new BlankIn();
-        this.so = new SoundOutThread();
+    public SoundWrapper(Context context) {
+        this.context = context;
+        this.si = new BlankIn(context);
+        this.so = new SoundOutThread(context);
     }
 
     public void setSoundSource (int soundSource) {
@@ -27,15 +30,15 @@ public class SoundWrapper {
                 if(si.getClass() != BlankIn.class){
                     Log.d("Basic", "Changing sound in to BlankIn");
                     si.close();
-                    si = new BlankIn();
+                    si = new BlankIn(context);
                     si.start();
                 }
                 break;
             case SOUND_SOURCE_MIC:
-                if(si.getClass() != SoundInMicThread.class){
-                    Log.d("Basic", "Changing sound in to SoundInMicThread");
+                if(si.getClass() != SoundInCinchThread.class){
+                    Log.d("Basic", "Changing sound in to SoundInCinchThread");
                     si.close();
-                    si = new SoundInMicThread();
+                    si = new SoundInCinchThread(context);
                     si.start();
                 }
                 break;
@@ -49,7 +52,7 @@ public class SoundWrapper {
                 if(so.getClass() != SoundOutThread.class) {
                     Log.d("Basic", "Changing sound out to SoundOutThread");
                     so.close();
-                    so = new SoundOutThread();
+                    so = new SoundOutThread(context);
                     so.start();
                 }
                 break;

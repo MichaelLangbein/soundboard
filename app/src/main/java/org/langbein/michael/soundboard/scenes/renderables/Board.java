@@ -1,6 +1,7 @@
 package org.langbein.michael.soundboard.scenes.renderables;
 
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import org.langbein.michael.soundboard.sound.SoundWrapper;
