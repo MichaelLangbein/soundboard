@@ -2,6 +2,7 @@ package org.langbein.michael.soundboard.sound;
 
 
 import android.content.Context;
+import android.media.AudioDeviceInfo;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
@@ -27,12 +28,6 @@ public class SoundInCinchThread extends Thread implements SoundIn {
     public SoundInCinchThread(Context context) {
 
         this.context = context;
-        // TODO: hiermit soll mic asugeschaltet werden damit keine nebengeräusche. aber funzt nicht.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            AudioManager am = context.getSystemService(AudioManager.class);
-            am.setMicrophoneMute(true);
-        }
-
 
         frequency = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
 
@@ -48,6 +43,11 @@ public class SoundInCinchThread extends Thread implements SoundIn {
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT,
                 bufferSizeInBytes);
+
+        AudioManager am = context.getSystemService(AudioManager.class);
+        AudioDeviceInfo[] inputDevices = am.getDevices(AudioManager.GET_DEVICES_INPUTS);
+        AudioDeviceInfo adi = inputDevices[0];
+        audioRecord.setPreferredDevice(adi);
 
         audiodata = new short[bufferSizeInBytes/4];
         inBuffer = new LinkedBlockingQueue<Short>();
