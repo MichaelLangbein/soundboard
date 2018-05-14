@@ -28,6 +28,8 @@ public class Board {
     private int height;
     private int width;
 
+    // Exposed settings
+    public static final int SETTING_TIMBRE = 0;
 
 
     public Board(float baseFreq, int sideLength, SoundWrapper sw){
@@ -120,4 +122,9 @@ public class Board {
         return new Vec2<Integer>(x + offsetFromLeft, y + offsetFromTop);
     }
 
+    public void setTimbre(int timbre) {
+        for(int k = 0; k < nKeys; k++){
+            keys[k].setTimbre(timbre);
+        }
+    }
 }

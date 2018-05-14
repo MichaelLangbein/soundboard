@@ -69,4 +69,8 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
 
     }
+
+    public void settings(int type, int value) {
+        sl.settings(type, value);
+    }
 }

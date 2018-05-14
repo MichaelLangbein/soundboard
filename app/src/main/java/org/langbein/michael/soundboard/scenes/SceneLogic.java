@@ -12,4 +12,6 @@ public interface SceneLogic {
     public void update(long delta);
 
     public void draw(Canvas canvas);
+
+    void settings(int settingType, int settingValue);
 }

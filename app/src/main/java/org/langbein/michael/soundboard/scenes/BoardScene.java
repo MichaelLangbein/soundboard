@@ -28,6 +28,15 @@ public class BoardScene implements SceneLogic {
     }
 
     @Override
+    public void settings(int settingType, int settingValue) {
+        switch (settingType) {
+            case Board.SETTING_TIMBRE:
+                board.setTimbre(settingValue);
+                break;
+        }
+    }
+
+    @Override
     public boolean onTouch(MotionEvent event) {
         return board.onTouch(event);
     }

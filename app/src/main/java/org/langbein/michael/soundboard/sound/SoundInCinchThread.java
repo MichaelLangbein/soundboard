@@ -38,16 +38,16 @@ public class SoundInCinchThread extends Thread implements SoundIn {
                 AudioFormat.ENCODING_PCM_16BIT);
 
         audioRecord = new AudioRecord(
-                MediaRecorder.AudioSource.DEFAULT,
+                MediaRecorder.AudioSource.MIC,
                 frequency,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT,
                 bufferSizeInBytes);
 
-        AudioManager am = context.getSystemService(AudioManager.class);
-        AudioDeviceInfo[] inputDevices = am.getDevices(AudioManager.GET_DEVICES_INPUTS);
-        AudioDeviceInfo adi = inputDevices[0];
-        audioRecord.setPreferredDevice(adi);
+//        AudioManager am = context.getSystemService(AudioManager.class);
+//        AudioDeviceInfo[] inputDevices = am.getDevices(AudioManager.GET_DEVICES_INPUTS);
+//        AudioDeviceInfo adi = inputDevices[0];
+//        audioRecord.setPreferredDevice(adi);
 
         audiodata = new short[bufferSizeInBytes/4];
         inBuffer = new LinkedBlockingQueue<Short>();

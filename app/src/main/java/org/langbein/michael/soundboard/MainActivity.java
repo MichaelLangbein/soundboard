@@ -7,7 +7,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import org.langbein.michael.soundboard.scenes.renderables.Board;
+import org.langbein.michael.soundboard.scenes.renderables.Key;
 import org.langbein.michael.soundboard.sound.SoundWrapper;
+import org.langbein.michael.soundboard.utils.MusicUtils;
 import org.langbein.michael.soundboard.views.BoardView;
 
 
@@ -47,6 +50,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.sourceToMic:
                 sw.setSoundSource(SoundWrapper.SOUND_SOURCE_MIC);
+                break;
+            case R.id.timbrePiano:
+                boardView.settings(Board.SETTING_TIMBRE, MusicUtils.TIMBRE_PIANO);
+                break;
+            case R.id.timbreSineWave:
+                boardView.settings(Board.SETTING_TIMBRE, MusicUtils.TIMBRE_SINEWAVE);
                 break;
         }
         return true;

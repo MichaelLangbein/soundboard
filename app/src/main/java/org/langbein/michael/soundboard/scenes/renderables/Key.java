@@ -21,6 +21,7 @@ public class Key implements Renderable, Touchable {
     private int b;
 
     // Sound
+    private int timbre;
     private float frq;
     private SoundWrapper sound;
     private boolean playing;
@@ -43,6 +44,7 @@ public class Key implements Renderable, Touchable {
         frq = freq;
         playing = false;
         offset = 0;
+        timbre = MusicUtils.TIMBRE_SINEWAVE;
 
     }
 
@@ -57,7 +59,7 @@ public class Key implements Renderable, Touchable {
                 bufferSize = sound.getBufferSize();
                 sampleRate = sound.getSampleRate();
 
-                data = MusicUtils.makeWave( bufferSize, frq, 1000, sampleRate, offset );
+                data = MusicUtils.makeWave( bufferSize, frq, 1000, sampleRate, offset, timbre );
                 offset = MusicUtils.calcOffset( bufferSize, frq, sampleRate, offset );
 
                 sound.addToCurrentBatch(data);
@@ -133,4 +135,7 @@ public class Key implements Renderable, Touchable {
         return frq;
     }
 
+    public void setTimbre(int timbre) {
+        this.timbre = timbre;
+    }
 }

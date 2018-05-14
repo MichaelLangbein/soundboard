@@ -1,11 +1,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/sourceToBlank"
-        android:title="Set sound-source to blank" />
-
-    <item android:id="@+id/sourceToMic"
-        android:title="Set sound-source to microphone" />
-
+    <item android:title="Sound Input">
+        <menu>
+            <item
+                android:id="@+id/sourceToMic"
+                android:title="Set sound-source to microphone" />
+            <item
+                android:id="@+id/sourceToBlank"
+                android:title="Set sound-source to blank" />
+        </menu>
+    </item>
+    <item android:title="Sound">
+        <menu>
+            <item
+                android:id="@+id/timbrePiano"
+                android:title="Piano" />
+            <item
+                android:id="@+id/timbreSineWave"
+                android:title="SineWave" />
+        </menu>
+    </item>
 
 
 </menu>
