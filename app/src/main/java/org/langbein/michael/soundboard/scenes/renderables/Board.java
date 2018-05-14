@@ -72,7 +72,7 @@ public class Board {
             double[] lights = FrequencyAnalysis.analyseInputOnKeys(smallerBatch, keyFrequencies, sampleRate/thinning);
             double[] lightsP = FrequencyAnalysis.postprocess(lights);
             for(int k = 0; k < nKeys; k++) {
-                keys[k].lightsOn(lightsP[k] / 30.0);
+                keys[k].lightsOn(lightsP[k]);
             }
         }
 

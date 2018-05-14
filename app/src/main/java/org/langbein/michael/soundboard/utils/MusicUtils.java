@@ -11,6 +11,10 @@ public class MusicUtils {
         return (float) (base * Math.pow(2.0, (n/12.0)));
     }
 
+    public static short[] makeWave(int len, double freq, double amplitude, double sampleRate, double offset) {
+        return makeWave(len, freq, amplitude, sampleRate, offset, TIMBRE_SINEWAVE);
+    }
+
     public static short[] makeWave(int len, double freq, double amplitude, double sampleRate, double offset, int timbre) {
         // @TODO:
         short[] data;

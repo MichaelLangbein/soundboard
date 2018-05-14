@@ -1,37 +1,31 @@
 package org.langbein.michael.soundboard.utils;
 
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 public class FrequencyAnalysis {
 
 
     /**
-     * The normal fourier analysis is oftentainted by weaker, irrelevant signals.
-     * For that reason, we filter out all but  the strongest two amplitudes.
+     * The normal fourier analysis is often tainted by weaker, irrelevant signals.
+     * For that reason, we filter out all but  the strongest N amplitudes.
      * Alternatively, we could have chosen a high-pass amplitude.
      * @param data
      * @return
      */
     public static double[] postprocess(double[] data) {
-        int maxIndx = 0;
-        int secIndx = 0;
 
-        for(int k = 0; k < data.length; k++)  {
-            if(data[k] > data[maxIndx]){
-                secIndx = maxIndx;
-                maxIndx = k;
-            } else if (data[k] > data[secIndx]) {
-                secIndx = k;
-            }
+        int[] maxIndices = ArrayUtils.highestN(data, 4);
+
+        double[] filteredData = new double[data.length];
+        for(int indx : maxIndices) {
+            filteredData[indx] = data[indx];
         }
 
-        for(int k = 0; k<data.length; k++){
-            if(k != maxIndx &&  k != secIndx){
-                data[k] = 0;
-            }
-        }
-
-        return data;
+        return filteredData;
     }
+
 
     /**
      * Analyse the relative brightness of every key by calculating the inner product with the keys frequency
