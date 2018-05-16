@@ -1,7 +1,9 @@
 # soundboard
 a dj keyboard
 
-Todos: 
+Todos:
+ - MIDI-Output
+   - https://source.android.com/devices/audio/midi
  - Aaudio for in- and output
    - https://github.com/google/oboe/blob/master/GettingStarted.md
    - https://github.com/googlesamples/android-audio-high-performance
