@@ -26,7 +26,7 @@ public class SoundInCinchThread extends Thread implements SoundIn {
     private BlockingQueue<Short> inBuffer;
 
     public SoundInCinchThread(Context context) {
-
+        Log.d("SoundThread", "Now initiating cinch thread");
         this.context = context;
 
         frequency = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
@@ -34,20 +34,23 @@ public class SoundInCinchThread extends Thread implements SoundIn {
 
         int bufferSizeInBytes = AudioRecord.getMinBufferSize(
                 frequency,
-                AudioFormat.CHANNEL_CONFIGURATION_MONO,
+                AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
 
         audioRecord = new AudioRecord(
-                MediaRecorder.AudioSource.MIC,
+                MediaRecorder.AudioSource.DEFAULT,
                 frequency,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT,
                 bufferSizeInBytes);
 
-//        AudioManager am = context.getSystemService(AudioManager.class);
-//        AudioDeviceInfo[] inputDevices = am.getDevices(AudioManager.GET_DEVICES_INPUTS);
-//        AudioDeviceInfo adi = inputDevices[0];
-//        audioRecord.setPreferredDevice(adi);
+        AudioManager am = context.getSystemService(AudioManager.class);
+        AudioDeviceInfo[] inputDevices = am.getDevices(AudioManager.GET_DEVICES_INPUTS);
+        for(AudioDeviceInfo adi : inputDevices){
+            Log.d("Input Devices", "Eines unserer Input devices: " +  adi.toString() );
+        }
+        //AudioDeviceInfo adi = inputDevices[0];
+        //audioRecord.setPreferredDevice(adi);
 
         audiodata = new short[bufferSizeInBytes/4];
         inBuffer = new LinkedBlockingQueue<Short>();
@@ -67,6 +70,7 @@ public class SoundInCinchThread extends Thread implements SoundIn {
          * offer <---------- special value
          * offer(long) <---- timeout
          */
+        Log.d("SoundThread", "Now starting to run cinch thread");
         Thread.currentThread().setName("SoundInCinchThread");
         Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         audioRecord.startRecording();
@@ -113,6 +117,11 @@ public class SoundInCinchThread extends Thread implements SoundIn {
         return data;
     }
 
+    @Override
+    public void startup() {
+        alive = true;
+        startRecording();
+    }
 
     public void close() {
         stopRecording();

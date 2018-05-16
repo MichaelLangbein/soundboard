@@ -6,7 +6,7 @@ package org.langbein.michael.soundboard.sound;
 
 public interface SoundIn {
 
-    public void start();
+    public void startup();
 
     public void close();
 

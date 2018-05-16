@@ -31,7 +31,7 @@ public class SoundWrapper {
                     Log.d("Basic", "Changing sound in to BlankIn");
                     si.close();
                     si = new BlankIn(context);
-                    si.start();
+                    si.startup();
                 }
                 break;
             case SOUND_SOURCE_MIC:
@@ -39,7 +39,7 @@ public class SoundWrapper {
                     Log.d("Basic", "Changing sound in to SoundInCinchThread");
                     si.close();
                     si = new SoundInCinchThread(context);
-                    si.start();
+                    si.startup();
                 }
                 break;
         }
@@ -115,7 +115,7 @@ public class SoundWrapper {
     }
 
     public void startThreads() {
-        si.start();
+        si.startup();
         so.start();
     }
 

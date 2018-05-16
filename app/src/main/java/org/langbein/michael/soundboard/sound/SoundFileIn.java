@@ -8,7 +8,7 @@ package org.langbein.michael.soundboard.sound;
 
 public class SoundFileIn implements SoundIn {
     @Override
-    public void start() {
+    public void startup() {
 
     }
 

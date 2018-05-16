@@ -17,7 +17,7 @@ public class BlankIn implements SoundIn {
     }
 
     @Override
-    public void start() {
+    public void startup() {
 
     }
 

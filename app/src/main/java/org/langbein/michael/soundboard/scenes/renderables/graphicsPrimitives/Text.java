@@ -30,10 +30,10 @@ public class Text {
     }
 
     public void drawWithPosInMiddle(Canvas canvas) {
-//        int start = 0;
+//        int startup = 0;
 //        int end = 0;
 //        Rect bounds = new Rect();
-//        paint.getTextBounds(text, start, end, bounds);
+//        paint.getTextBounds(text, startup, end, bounds);
 //        int len = bounds.right - bounds.left;
 //        int hig = bounds.top - bounds.top;
 //        canvas.drawText(text, (int)(posX - len/2), (int)(posY - hig/2), paint);
