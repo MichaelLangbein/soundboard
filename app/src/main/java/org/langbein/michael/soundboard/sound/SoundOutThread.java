@@ -108,7 +108,16 @@ public class SoundOutThread extends Thread implements SoundOut {
 
     public int getSampleRate() { return track.getSampleRate(); }
 
-    public void close() {
+    @Override
+    public void soundOutStart() {
+        running = true;
+        alive = true;
+        if(!isAlive()){
+            start();
+        }
+    }
+
+    public void soundOutClose() {
         running = false;
         alive = false;
     }

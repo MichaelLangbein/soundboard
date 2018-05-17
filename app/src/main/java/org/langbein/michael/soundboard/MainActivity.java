@@ -57,6 +57,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.timbreSineWave:
                 boardView.settings(Board.SETTING_TIMBRE, MusicUtils.TIMBRE_SINEWAVE);
                 break;
+            case R.id.sinkToStream:
+                sw.setSoundTarget(SoundWrapper.SOUND_TARGET_STREAM);
+                break;
+            case R.id.sinkToMidi:
+                sw.setSoundTarget(SoundWrapper.SOUND_TARGET_MIDI);
+                break;
         }
         return true;
     }

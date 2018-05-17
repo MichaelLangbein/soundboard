@@ -20,6 +20,16 @@
                 android:title="SineWave" />
         </menu>
     </item>
+    <item android:title="Sound Output" >
+        <menu >
+            <item
+                android:id="@+id/sinkToStream"
+                android:title="Stream" />
+            <item
+                android:id="@+id/sinkToMidi"
+                android:title="Midi" />
+        </menu>
+    </item>
 
 
 </menu>

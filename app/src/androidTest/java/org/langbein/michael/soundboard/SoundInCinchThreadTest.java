@@ -16,17 +16,17 @@ import static junit.framework.Assert.assertTrue;
 public class SoundInCinchThreadTest {
 
     @Test
-    public void testInitiation() throws InterruptedException {
+    public void testInitiation() throws Exception {
 
         Context appContext = InstrumentationRegistry.getTargetContext();
         SoundInCinchThread sct = new SoundInCinchThread(appContext);
 
         assertTrue(sct instanceof SoundInCinchThread);
 
-        sct.start();
+        sct.soundInStart();
         Thread.sleep(100);
         short[] data = sct.takeFromBuffer(10);
-        sct.close();
+        sct.soundInStop();
 
         Log.d("TestSoundInCinch", "Data is as such: " + data);
         assertTrue(data.length > 0);

@@ -16,30 +16,36 @@ public class SoundWrapper {
 
     public static final int SOUND_SOURCE_BLANK = 1;
     public static final int SOUND_SOURCE_MIC = 2;
-    public static final int SOUND_TARGET_DEFAULT = 10;
+    public static final int SOUND_TARGET_STREAM = 3;
+    public static final int SOUND_TARGET_MIDI = 4;
 
     public SoundWrapper(Context context) {
         this.context = context;
-        this.si = new BlankIn(context);
+        this.si = new BlankInThread(context);
         this.so = new SoundOutThread(context);
     }
 
     public void setSoundSource (int soundSource) {
         switch(soundSource) {
             case SOUND_SOURCE_BLANK:
-                if(si.getClass() != BlankIn.class){
-                    Log.d("Basic", "Changing sound in to BlankIn");
-                    si.close();
-                    si = new BlankIn(context);
-                    si.startup();
+                if(si.getClass() != BlankInThread.class){
+                    Log.d("Basic", "Changing sound in to BlankInThread");
+                    si.soundInStop();
+                    si = new BlankInThread(context);
+                    si.soundInStart();
                 }
                 break;
             case SOUND_SOURCE_MIC:
                 if(si.getClass() != SoundInCinchThread.class){
                     Log.d("Basic", "Changing sound in to SoundInCinchThread");
-                    si.close();
-                    si = new SoundInCinchThread(context);
-                    si.startup();
+                    si.soundInStop();
+                    try {
+                        si = new SoundInCinchThread(context);
+                    } catch (Exception e) {
+                        Log.e("SoundWrapper", "Konnte SoundInCinchThread nicht initiieren.");
+                        e.printStackTrace();
+                    }
+                    si.soundInStart();
                 }
                 break;
         }
@@ -48,12 +54,24 @@ public class SoundWrapper {
 
     public void setSoundTarget(int soundTarget) {
         switch(soundTarget) {
-            case SOUND_TARGET_DEFAULT:
+            case SOUND_TARGET_STREAM:
                 if(so.getClass() != SoundOutThread.class) {
                     Log.d("Basic", "Changing sound out to SoundOutThread");
-                    so.close();
+                    so.soundOutClose();
                     so = new SoundOutThread(context);
-                    so.start();
+                    so.soundOutStart();
+                }
+                break;
+            case SOUND_TARGET_MIDI:
+                if(so.getClass() != SoundOutMidiThread.class) {
+                    if(si.getClass() == SoundInCinchThread.class){
+                        Log.d("Basic", "Cannot use Cinch Thread at same time as Midi-Out. Setting to blank");
+                        setSoundSource(SOUND_SOURCE_BLANK);
+                    }
+                    Log.d("Basic", "Changing sound out to SoundOutMidiThread");
+                    so.soundOutClose();
+                    so = new SoundOutMidiThread(context);
+                    so.soundOutStart();
                 }
                 break;
         }
@@ -115,13 +133,13 @@ public class SoundWrapper {
     }
 
     public void startThreads() {
-        si.startup();
-        so.start();
+        si.soundInStart();
+        so.soundOutStart();
     }
 
     public void stopThreads() {
-        si.close();
-        so.close();
+        si.soundInStop();
+        so.soundOutClose();
     }
 
 }

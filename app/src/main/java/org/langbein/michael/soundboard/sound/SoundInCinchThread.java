@@ -25,12 +25,11 @@ public class SoundInCinchThread extends Thread implements SoundIn {
     private short[] audiodata;
     private BlockingQueue<Short> inBuffer;
 
-    public SoundInCinchThread(Context context) {
+    public SoundInCinchThread(Context context) throws Exception {
         Log.d("SoundThread", "Now initiating cinch thread");
         this.context = context;
 
         frequency = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
-
 
         int bufferSizeInBytes = AudioRecord.getMinBufferSize(
                 frequency,
@@ -44,11 +43,15 @@ public class SoundInCinchThread extends Thread implements SoundIn {
                 AudioFormat.ENCODING_PCM_16BIT,
                 bufferSizeInBytes);
 
-        AudioManager am = context.getSystemService(AudioManager.class);
-        AudioDeviceInfo[] inputDevices = am.getDevices(AudioManager.GET_DEVICES_INPUTS);
-        for(AudioDeviceInfo adi : inputDevices){
-            Log.d("Input Devices", "Eines unserer Input devices: " +  adi.toString() );
+        if(audioRecord.getState() != AudioRecord.STATE_INITIALIZED) {
+            throw new Exception("Konnte AudioRecord nicht initiieren. Tatsächlicher Zustand ist " + audioRecord.getState());
         }
+
+//        AudioManager am = context.getSystemService(AudioManager.class);
+//        AudioDeviceInfo[] inputDevices = am.getDevices(AudioManager.GET_DEVICES_INPUTS);
+//        for(AudioDeviceInfo adi : inputDevices){
+//            Log.d("Input Devices", "Eines unserer Input devices: " +  adi.toString() );
+//        }
         //AudioDeviceInfo adi = inputDevices[0];
         //audioRecord.setPreferredDevice(adi);
 
@@ -62,6 +65,10 @@ public class SoundInCinchThread extends Thread implements SoundIn {
     }
 
 
+    /**
+     * This method is extended from the Thread class. Don't call it directly!
+     * Instead call soundInStart().
+     */
     @Override
     public void run() {
         /**
@@ -118,23 +125,19 @@ public class SoundInCinchThread extends Thread implements SoundIn {
     }
 
     @Override
-    public void startup() {
+    public void soundInStart() {
         alive = true;
-        startRecording();
+        recording = true;
+        if(!isAlive()){
+            start(); // starts the actual thread
+        }
     }
 
-    public void close() {
-        stopRecording();
+    public void soundInStop() {
+        recording = false;
         alive = false;
     }
 
-    public void stopRecording() {
-        recording = false;
-    }
-
-    public void startRecording() {
-        recording = true;
-    }
 
     public int getSampleRate() {
         return frequency;

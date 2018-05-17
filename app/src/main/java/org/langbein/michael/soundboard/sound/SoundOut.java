@@ -6,9 +6,9 @@ package org.langbein.michael.soundboard.sound;
 
 public interface SoundOut {
 
-    public void start();
+    public void soundOutStart();
 
-    public void close();
+    public void soundOutClose();
 
     public void addToBuffer(short[] data);
 
