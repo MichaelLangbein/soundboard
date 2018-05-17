@@ -5,8 +5,12 @@ import android.content.pm.PackageManager;
 import android.media.midi.MidiDeviceInfo;
 import android.media.midi.MidiManager;
 
+import java.util.ArrayList;
+
 public class SoundOutMidiThread extends Thread implements SoundOut {
 
+    MidiManager midiManager;
+    ArrayList<MidiDeviceInfo> devices;
     private boolean alive;
 
     public SoundOutMidiThread(Context context) throws Exception {
@@ -15,15 +19,19 @@ public class SoundOutMidiThread extends Thread implements SoundOut {
             throw new Exception("You need MIDI enabled to be able to use the MidiOutThread.");
         }
 
-        MidiManager midiManager = (MidiManager)context.getSystemService(Context.MIDI_SERVICE);
+        midiManager = (MidiManager)context.getSystemService(Context.MIDI_SERVICE);
         MidiDeviceInfo[] infos = midiManager.getDevices();
+        devices = new ArrayList<MidiDeviceInfo>();
+        for(MidiDeviceInfo device : infos){
+            devices.add(device);
+        }
 
         midiManager.registerDeviceCallback(new MidiManager.DeviceCallback() {
             public void onDeviceAdded( MidiDeviceInfo info ) {
-      ...
+                devices.add(info);
             }
             public void onDeviceRemoved( MidiDeviceInfo info ) {
-      ...
+                devices.remove(info);
             }
         });
 

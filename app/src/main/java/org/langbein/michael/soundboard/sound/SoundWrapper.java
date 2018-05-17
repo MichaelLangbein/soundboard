@@ -3,6 +3,8 @@ package org.langbein.michael.soundboard.sound;
 import android.util.Log;
 import android.content.Context;
 
+import org.langbein.michael.soundboard.utils.MusicUtils;
+
 /**
  * Created by michael on 17.02.18.
  */
@@ -85,6 +87,24 @@ public class SoundWrapper {
         return currentBatch;
     }
 
+
+    public double playNote(float frq, int amplitude, double offset, int timbre) throws Exception {
+
+        int bufferSize, sampleRate;
+        short[] data;
+
+        bufferSize = getBufferSize();
+        sampleRate = getSampleRate();
+
+        data = MusicUtils.makeWave( bufferSize, frq, amplitude, sampleRate, offset, timbre );
+        offset = MusicUtils.calcOffset( bufferSize, frq, sampleRate, offset );
+
+        addToCurrentBatch(data);
+
+        return offset;
+    }
+
+
     public void addToCurrentBatch(short[] data) throws Exception {
 
         if(currentBatch == null) {
@@ -141,5 +161,6 @@ public class SoundWrapper {
         si.soundInStop();
         so.soundOutClose();
     }
+
 
 }
