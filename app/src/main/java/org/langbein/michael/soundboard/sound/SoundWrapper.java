@@ -64,18 +64,18 @@ public class SoundWrapper {
                     so.soundOutStart();
                 }
                 break;
-            case SOUND_TARGET_MIDI:
-                if(so.getClass() != SoundOutMidiThread.class) {
-                    if(si.getClass() == SoundInCinchThread.class){
-                        Log.d("Basic", "Cannot use Cinch Thread at same time as Midi-Out. Setting to blank");
-                        setSoundSource(SOUND_SOURCE_BLANK);
-                    }
-                    Log.d("Basic", "Changing sound out to SoundOutMidiThread");
-                    so.soundOutClose();
-                    so = new SoundOutMidiThread(context);
-                    so.soundOutStart();
-                }
-                break;
+//            case SOUND_TARGET_MIDI:
+//                if(so.getClass() != SoundOutMidiThread.class) {
+//                    if(si.getClass() == SoundInCinchThread.class){
+//                        Log.d("Basic", "Cannot use Cinch Thread at same time as Midi-Out. Setting to blank");
+//                        setSoundSource(SOUND_SOURCE_BLANK);
+//                    }
+//                    Log.d("Basic", "Changing sound out to SoundOutMidiThread");
+//                    so.soundOutClose();
+//                    so = new SoundOutMidiThread(context);
+//                    so.soundOutStart();
+//                }
+//                break;
         }
     }
 
@@ -86,24 +86,6 @@ public class SoundWrapper {
     public short[] getCurrentBatch() {
         return currentBatch;
     }
-
-
-    public double playNote(float frq, int amplitude, double offset, int timbre) throws Exception {
-
-        int bufferSize, sampleRate;
-        short[] data;
-
-        bufferSize = getBufferSize();
-        sampleRate = getSampleRate();
-
-        data = MusicUtils.makeWave( bufferSize, frq, amplitude, sampleRate, offset, timbre );
-        offset = MusicUtils.calcOffset( bufferSize, frq, sampleRate, offset );
-
-        addToCurrentBatch(data);
-
-        return offset;
-    }
-
 
     public void addToCurrentBatch(short[] data) throws Exception {
 

@@ -26,14 +26,14 @@ public class SoundOutMidiThread extends Thread implements SoundOut {
             devices.add(device);
         }
 
-        midiManager.registerDeviceCallback(new MidiManager.DeviceCallback() {
-            public void onDeviceAdded( MidiDeviceInfo info ) {
-                devices.add(info);
-            }
-            public void onDeviceRemoved( MidiDeviceInfo info ) {
-                devices.remove(info);
-            }
-        });
+//        midiManager.registerDeviceCallback(new MidiManager.DeviceCallback() {
+//            public void onDeviceAdded( MidiDeviceInfo info ) {
+//                devices.add(info);
+//            }
+//            public void onDeviceRemoved( MidiDeviceInfo info ) {
+//                devices.remove(info);
+//            }
+//        });
 
         alive = true;
     }

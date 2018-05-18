@@ -15,6 +15,7 @@ import static junit.framework.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class SoundInCinchThreadTest {
 
+
     @Test
     public void testInitiation() throws Exception {
 

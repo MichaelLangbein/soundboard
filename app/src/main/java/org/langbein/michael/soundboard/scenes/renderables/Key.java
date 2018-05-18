@@ -50,8 +50,23 @@ public class Key implements Renderable, Touchable {
 
     @Override
     public void update(long delta) {
+
+        int bufferSize, sampleRate;
+        short[] data;
+
         if(playing) {
-            offset = sound.playNote(frq, 1000, offset, timbre);
+
+            bufferSize = sound.getBufferSize();
+            sampleRate = sound.getSampleRate();
+
+            data = MusicUtils.makeWave( bufferSize, frq, 1000, sampleRate, offset, timbre );
+            offset = MusicUtils.calcOffset( bufferSize, frq, sampleRate, offset );
+
+            try {
+                sound.addToCurrentBatch(data);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

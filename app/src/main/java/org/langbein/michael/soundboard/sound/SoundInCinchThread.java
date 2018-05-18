@@ -14,11 +14,13 @@ import android.util.Log;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static org.langbein.michael.soundboard.sound.SoundApiHelper.getBufferSizeInBytes;
+
 public class SoundInCinchThread extends Thread implements SoundIn {
 
 
-    private final int frequency;
-    private final Context context;
+    private int frequency;
+    private Context context;
     private boolean recording;
     private boolean alive;
     private AudioRecord audioRecord;
@@ -29,32 +31,9 @@ public class SoundInCinchThread extends Thread implements SoundIn {
         Log.d("SoundThread", "Now initiating cinch thread");
         this.context = context;
 
-        frequency = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
-
-        int bufferSizeInBytes = AudioRecord.getMinBufferSize(
-                frequency,
-                AudioFormat.CHANNEL_IN_MONO,
-                AudioFormat.ENCODING_PCM_16BIT);
-
-        audioRecord = new AudioRecord(
-                MediaRecorder.AudioSource.DEFAULT,
-                frequency,
-                AudioFormat.CHANNEL_IN_MONO,
-                AudioFormat.ENCODING_PCM_16BIT,
-                bufferSizeInBytes);
-
-        if(audioRecord.getState() != AudioRecord.STATE_INITIALIZED) {
-            throw new Exception("Konnte AudioRecord nicht initiieren. Tatsächlicher Zustand ist " + audioRecord.getState());
-        }
-
-//        AudioManager am = context.getSystemService(AudioManager.class);
-//        AudioDeviceInfo[] inputDevices = am.getDevices(AudioManager.GET_DEVICES_INPUTS);
-//        for(AudioDeviceInfo adi : inputDevices){
-//            Log.d("Input Devices", "Eines unserer Input devices: " +  adi.toString() );
-//        }
-        //AudioDeviceInfo adi = inputDevices[0];
-        //audioRecord.setPreferredDevice(adi);
-
+        frequency =  SoundApiHelper.getNativeSampleRate();
+        audioRecord = SoundApiHelper.findWorkingAudioRecord();
+        int bufferSizeInBytes = SoundApiHelper.getBufferSizeInBytes(audioRecord);
         audiodata = new short[bufferSizeInBytes/4];
         inBuffer = new LinkedBlockingQueue<Short>();
 
