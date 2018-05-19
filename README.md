@@ -6,6 +6,7 @@ Todos:
  - MIDI-Output
    - expose available devices in a selection menu
    - update linux kernel to allow midi   
+   - Ugh. My §$% lenovo tab doesnt support midi. Could use https://github.com/kshoji/USB-MIDI-Driver 
    
  - Aaudio for in- and output
    - https://github.com/google/oboe/blob/master/GettingStarted.md
