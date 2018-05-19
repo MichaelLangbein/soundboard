@@ -3,24 +3,19 @@ package org.langbein.michael.soundboard.sound;
 
 import android.content.Context;
 import android.media.AudioDeviceInfo;
-import android.media.AudioFormat;
-import android.media.AudioManager;
 import android.media.AudioRecord;
-import android.media.AudioTrack;
-import android.media.MediaRecorder;
-import android.os.Build;
 import android.util.Log;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static org.langbein.michael.soundboard.sound.SoundApiHelper.getBufferSizeInBytes;
 
 public class SoundInCinchThread extends Thread implements SoundIn {
 
 
     private int frequency;
     private Context context;
+    private SoundApiHelper sah;
     private boolean recording;
     private boolean alive;
     private AudioRecord audioRecord;
@@ -31,9 +26,10 @@ public class SoundInCinchThread extends Thread implements SoundIn {
         Log.d("SoundThread", "Now initiating cinch thread");
         this.context = context;
 
-        frequency =  SoundApiHelper.getNativeSampleRate();
-        audioRecord = SoundApiHelper.findWorkingAudioRecord();
-        int bufferSizeInBytes = SoundApiHelper.getBufferSizeInBytes(audioRecord);
+        frequency =  sah.getNativeSampleRate();
+        audioRecord = sah.findWorkingAudioRecord();
+        AudioDeviceInfo[] devices = sah.getInputDeviceInfos();
+        int bufferSizeInBytes = sah.getBufferSizeInBytes(audioRecord);
         audiodata = new short[bufferSizeInBytes/4];
         inBuffer = new LinkedBlockingQueue<Short>();
 

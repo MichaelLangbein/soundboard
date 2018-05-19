@@ -59,7 +59,7 @@ public class Key implements Renderable, Touchable {
             bufferSize = sound.getBufferSize();
             sampleRate = sound.getSampleRate();
 
-            data = MusicUtils.makeWave( bufferSize, frq, 1000, sampleRate, offset, timbre );
+            data = MusicUtils.makeWave( bufferSize, frq, Short.MAX_VALUE / 6, sampleRate, offset, timbre );
             offset = MusicUtils.calcOffset( bufferSize, frq, sampleRate, offset );
 
             try {

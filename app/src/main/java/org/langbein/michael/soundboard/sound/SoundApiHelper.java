@@ -1,5 +1,7 @@
 package org.langbein.michael.soundboard.sound;
 
+import android.content.Context;
+import android.media.AudioDeviceInfo;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
@@ -9,17 +11,22 @@ import android.util.Log;
 
 public class SoundApiHelper {
 
-    public static AudioRecord findWorkingAudioRecord() throws Exception {
+    private Context context;
+    private final AudioManager am;
+    private int audioSource;
+    private int audioChannel;
+    private int audioEncoding;
+    private int frequency;
+    private AudioRecord audioRecord;
 
-        //        AudioManager am = context.getSystemService(AudioManager.class);
-//        AudioDeviceInfo[] inputDevices = am.getDevices(AudioManager.GET_DEVICES_INPUTS);
-//        for(AudioDeviceInfo adi : inputDevices){
-//            Log.d("Input Devices", "Eines unserer Input devices: " +  adi.toString() );
-//        }
-        //AudioDeviceInfo adi = inputDevices[0];
-        //audioRecord.setPreferredDevice(adi);
+    public SoundApiHelper(Context context) {
+        this.context = context;
+        this.am = context.getSystemService(AudioManager.class);
+    }
 
-        int frequency = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
+    public AudioRecord findWorkingAudioRecord() throws Exception {
+
+        frequency = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
 
         int[] possibleAudioSources = {
                 MediaRecorder.AudioSource.DEFAULT,  // das sollte es sein
@@ -71,6 +78,10 @@ public class SoundApiHelper {
                                 bufferSizeInBytes);
 
                         if(audioRecord.getState() == AudioRecord.STATE_INITIALIZED) {
+                            this.audioRecord = audioRecord;
+                            this.audioSource = audioSource;
+                            this.audioChannel = audioChannel;
+                            this.audioEncoding = audioEncoding;
                             return audioRecord;
                         }
 
@@ -88,7 +99,7 @@ public class SoundApiHelper {
         throw new Exception("Keine valide Kombination von Parametern für AudioRecord gefunden!");
     }
 
-    public static int getBufferSizeInBytes(AudioRecord audioRecord) {
+    public int getBufferSizeInBytes(AudioRecord audioRecord) {
         int sampleRate = getNativeSampleRate();
         int channelConfiguration = audioRecord.getChannelConfiguration();
         int audioFormat = audioRecord.getAudioFormat();
@@ -96,7 +107,28 @@ public class SoundApiHelper {
         return minBufferSize;
     }
 
-    public static int getNativeSampleRate() {
+    public int getNativeSampleRate() {
         return  AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
     }
+
+    public AudioDeviceInfo[] getInputDeviceInfos () {
+        AudioDeviceInfo[] inputDevices = am.getDevices(AudioManager.GET_DEVICES_INPUTS);
+        for(AudioDeviceInfo adi : inputDevices){
+            Log.d("Input Devices", "Eines unserer Input devices: " +  adi.toString() );
+        }
+        return inputDevices;
+    }
+
+    public AudioDeviceInfo[] getOutputDeviceInfos () {
+        AudioDeviceInfo[] outputDevices = am.getDevices(AudioManager.GET_DEVICES_OUTPUTS);
+        for(AudioDeviceInfo adi : outputDevices){
+            Log.d("Output Devices", "Eines unserer Output devices: " +  adi.toString() );
+        }
+        return outputDevices;
+    }
+
+    public void setPreferredDevice(AudioRecord audioRecord, AudioDeviceInfo deviceInfo) {
+        audioRecord.setPreferredDevice(deviceInfo);
+    }
+
 }
