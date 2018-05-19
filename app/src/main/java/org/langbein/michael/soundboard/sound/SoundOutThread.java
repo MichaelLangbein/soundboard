@@ -1,8 +1,6 @@
 package org.langbein.michael.soundboard.sound;
 
 import android.content.Context;
-import android.media.AudioFormat;
-import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.util.Log;
 
@@ -12,6 +10,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class SoundOutThread extends Thread implements SoundOut {
 
+    private Context context;
+    private SoundApiHelper sah;
     private final int sampleRate;
     private final int minSize;
     private AudioTrack track;
@@ -21,25 +21,17 @@ public class SoundOutThread extends Thread implements SoundOut {
 
     public SoundOutThread(Context context) {
 
-        running = true;
-        alive = true;
+        this.context = context;
+        this.sah = new SoundApiHelper(context);
 
-        sampleRate = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
-
-        minSize = AudioTrack.getMinBufferSize(sampleRate,
-                AudioFormat.CHANNEL_CONFIGURATION_MONO,
-                AudioFormat.ENCODING_PCM_16BIT);
-
+        sampleRate = sah.getNativeOutputSampleRate();
+        track = sah.findWorkingAudioTrack();
+        minSize = sah.getMinOutputBufferSize();
         Log.d("Basic", "Blocking queue has maxSize " + 4 * minSize);
         prebuffer = new LinkedBlockingQueue<Short>(4 * minSize);
 
-        track = new AudioTrack(AudioManager.STREAM_MUSIC,
-                sampleRate,
-                AudioFormat.CHANNEL_CONFIGURATION_MONO,
-                AudioFormat.ENCODING_PCM_16BIT,
-                minSize,
-                AudioTrack.MODE_STREAM);
-
+        running = true;
+        alive = true;
 
     }
 

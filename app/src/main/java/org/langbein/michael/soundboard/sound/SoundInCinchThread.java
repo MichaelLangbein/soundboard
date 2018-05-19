@@ -26,7 +26,7 @@ public class SoundInCinchThread extends Thread implements SoundIn {
         Log.d("SoundThread", "Now initiating cinch thread");
         this.context = context;
 
-        frequency =  sah.getNativeSampleRate();
+        frequency =  sah.getNativeOutputSampleRate();
         audioRecord = sah.findWorkingAudioRecord();
         AudioDeviceInfo[] devices = sah.getInputDeviceInfos();
         int bufferSizeInBytes = sah.getBufferSizeInBytes(audioRecord);
