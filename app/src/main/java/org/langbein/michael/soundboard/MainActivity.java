@@ -1,10 +1,14 @@
 package org.langbein.michael.soundboard;
 
+import android.media.midi.MidiDeviceInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import org.langbein.michael.soundboard.sound.MidiWrapper;
 import org.langbein.michael.soundboard.views.BoardView;
+
+import java.util.ArrayList;
 
 
 /**
@@ -24,7 +28,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mw = new MidiWrapper(this);
+        try {
+            mw = new MidiWrapper(this);
+        } catch (Exception e) {
+            Log.e("MainActivity", e.getMessage());
+            return;
+        }
+        ArrayList<MidiDeviceInfo> infos = mw.getDeviceInfos();
+        mw.choseMidiDevice(infos.get(0), 1);
+
         boardView = new BoardView(this, mw);
         setContentView(boardView);
         boardView.startRendering();
@@ -35,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         boardView.stopRendering();
-        mw.onDestroy();
         super.onDestroy();
     }
 }
