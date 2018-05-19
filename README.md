@@ -5,6 +5,7 @@ Todos:
 
  - OSC
    - Try this: https://courses.ideate.cmu.edu/16-223/f2014/tutorial-android-osc-communication/ 
+   - https://wush.net/trac/lsu-idt/wiki/JavaOSC 
 
  - MIDI-Output
    - expose available devices in a selection menu
