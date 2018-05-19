@@ -3,6 +3,9 @@ a dj keyboard
 
 Todos:
 
+ - OSC
+   - Try this: https://courses.ideate.cmu.edu/16-223/f2014/tutorial-android-osc-communication/ 
+
  - MIDI-Output
    - expose available devices in a selection menu
    - update linux kernel to allow midi   
