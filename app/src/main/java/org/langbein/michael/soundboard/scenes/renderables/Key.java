@@ -1,13 +1,11 @@
 package org.langbein.michael.soundboard.scenes.renderables;
 
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import org.langbein.michael.soundboard.scenes.renderables.graphicsPrimitives.Hexagon;
 import org.langbein.michael.soundboard.scenes.renderables.graphicsPrimitives.Text;
-import org.langbein.michael.soundboard.utils.MusicUtils;
-import org.langbein.michael.soundboard.sound.SoundWrapper;
+import org.langbein.michael.soundboard.sound.MidiWrapper;
 
 
 public class Key implements Renderable, Touchable {
@@ -21,15 +19,12 @@ public class Key implements Renderable, Touchable {
     private int b;
 
     // Sound
-    private int timbre;
     private float frq;
-    private SoundWrapper sound;
-    private boolean playing;
-    private double offset;
+    private MidiWrapper sound;
 
     // State
 
-    public Key(int posX, int posY, int len, float freq, int indx, SoundWrapper sw) {
+    public Key(int posX, int posY, int len, float freq, int indx, MidiWrapper sw) {
 
         // Graphics
         hex = new Hexagon(posX, posY, len);
@@ -42,32 +37,12 @@ public class Key implements Renderable, Touchable {
         // Sound
         sound = sw;
         frq = freq;
-        playing = false;
-        offset = 0;
-        timbre = MusicUtils.TIMBRE_SINEWAVE;
-
+        // TODO: what should channel and velocity be?
     }
 
     @Override
     public void update(long delta) {
 
-        int bufferSize, sampleRate;
-        short[] data;
-
-        if(playing) {
-
-            bufferSize = sound.getBufferSize();
-            sampleRate = sound.getSampleRate();
-
-            data = MusicUtils.makeWave( bufferSize, frq, Short.MAX_VALUE / 6, sampleRate, offset, timbre );
-            offset = MusicUtils.calcOffset( bufferSize, frq, sampleRate, offset );
-
-            try {
-                sound.addToCurrentBatch(data);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override
@@ -118,23 +93,19 @@ public class Key implements Renderable, Touchable {
     }
 
     private void startPlayingNote() {
-        playing = true;
+        // TODO
     }
 
     private void continuePlayingNote() {
-        playing = true;
+        sound.noteOn(1, frq, 60);
     }
 
     private void stopPlayingNote() {
-        playing = false;
-        offset = 0;
+        sound.noteOff(1, frq, 60);
     }
 
     public double getFrequency() {
         return frq;
     }
 
-    public void setTimbre(int timbre) {
-        this.timbre = timbre;
-    }
 }

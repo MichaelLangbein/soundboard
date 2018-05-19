@@ -7,14 +7,14 @@ import android.view.SurfaceView;
 
 import org.langbein.michael.soundboard.scenes.BoardScene;
 import org.langbein.michael.soundboard.scenes.SceneLogic;
-import org.langbein.michael.soundboard.sound.SoundWrapper;
+import org.langbein.michael.soundboard.sound.MidiWrapper;
 
 
 /**
  * Coming from a web background, I like to think of activities and views as server- and client-side.
  * An activity is like the server, in that it does the background logic and only talks when called.
  * A view is like the client side, in that it contains the render loop and calls upon the server
- * when neccessary.
+ * when necessary.
  *
  *
  * A surfaceView is a special kind of view
@@ -28,10 +28,10 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback {
 
     private SceneLogic sl;
     private BoardRenderThread brt;
-    private SoundWrapper sw;
+    private MidiWrapper sw;
 
 
-    public BoardView(Context context, SoundWrapper sw) {
+    public BoardView(Context context, MidiWrapper sw) {
         super(context);
         this.sw = sw;
         this.sl = new BoardScene(sw);;
@@ -39,14 +39,12 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void startRendering() {
-        sw.startThreads();
         brt.enableRendering();
         brt.start();
     }
 
     public void stopRendering() {
         brt.close();
-        sw.stopThreads();
     }
 
 
