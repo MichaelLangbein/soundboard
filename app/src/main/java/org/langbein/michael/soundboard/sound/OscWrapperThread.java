@@ -12,7 +12,7 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 
 
-public class OscWrapper extends Thread {
+public class OscWrapperThread extends Thread {
 
     private class MessageTask {
         private Object[] args;
@@ -28,7 +28,7 @@ public class OscWrapper extends Thread {
     private OSCPortOut sender;
     private LinkedList<MessageTask> queue;
 
-    public OscWrapper(Context context) {
+    public OscWrapperThread(Context context) {
         queue = new LinkedList<MessageTask>();
     }
 

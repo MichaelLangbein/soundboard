@@ -8,6 +8,7 @@ import android.view.SurfaceView;
 import org.langbein.michael.soundboard.scenes.BoardScene;
 import org.langbein.michael.soundboard.scenes.SceneLogic;
 import org.langbein.michael.soundboard.sound.MidiWrapper;
+import org.langbein.michael.soundboard.sound.OscWrapperThread;
 
 
 /**
@@ -28,10 +29,10 @@ public class BoardView extends SurfaceView implements SurfaceHolder.Callback {
 
     private SceneLogic sl;
     private BoardRenderThread brt;
-    private MidiWrapper sw;
+    private OscWrapperThread sw;
 
 
-    public BoardView(Context context, MidiWrapper sw) {
+    public BoardView(Context context, OscWrapperThread sw) {
         super(context);
         this.sw = sw;
         this.sl = new BoardScene(sw);;

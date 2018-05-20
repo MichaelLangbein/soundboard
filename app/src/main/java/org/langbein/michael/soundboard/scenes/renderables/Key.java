@@ -5,8 +5,7 @@ import android.view.MotionEvent;
 
 import org.langbein.michael.soundboard.scenes.renderables.graphicsPrimitives.Hexagon;
 import org.langbein.michael.soundboard.scenes.renderables.graphicsPrimitives.Text;
-import org.langbein.michael.soundboard.sound.MidiWrapper;
-import org.langbein.michael.soundboard.sound.OscWrapper;
+import org.langbein.michael.soundboard.sound.OscWrapperThread;
 
 
 public class Key implements Renderable, Touchable {
@@ -21,16 +20,16 @@ public class Key implements Renderable, Touchable {
 
     // Sound
     private float frq;
-    private OscWrapper sound;
+    private OscWrapperThread sound;
 
     // State
 
-    public Key(int posX, int posY, int len, float freq, int indx, OscWrapper sw) {
+    public Key(int posX, int posY, int len, float freq, int indx, OscWrapperThread sw) {
 
         // Graphics
         hex = new Hexagon(posX, posY, len);
         text = new Text(posX, posY, String.valueOf(indx), 20);
-        a = 50;
+        a = 100;
         r =  (int)(255 * Math.random());
         g =  (int)(255 * Math.random());
         b =  (int)(255 * Math.random());
@@ -90,19 +89,17 @@ public class Key implements Renderable, Touchable {
     }
 
     private void lightsOut(){
-        setFillColor(25, r, g, b);
+        setFillColor(100, r, g, b);
     }
 
     private void startPlayingNote(double intensity) {
-        // TODO
+        sound.soundOn(intensity, frq);
     }
 
-    private void continuePlayingNote(double intensity) {
-        // TODO
-    }
+    private void continuePlayingNote(double intensity) {}
 
     private void stopPlayingNote() {
-        sound.noteOff();
+        sound.soundOff(frq);
     }
 
     public double getFrequency() {

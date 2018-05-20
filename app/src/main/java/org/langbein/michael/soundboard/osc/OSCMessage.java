@@ -3,7 +3,6 @@ package org.langbein.michael.soundboard.osc;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import com.illposed.osc.utility.*;
 
 import org.langbein.michael.soundboard.osc.utility.OSCJavaToByteArrayConverter;
 
@@ -112,9 +111,9 @@ public class OSCMessage extends OSCPacket {
 		if (null == arguments)
 			return;
 		stream.writeTypes(arguments);
-		Enumeration enum = arguments.elements();
-		while (enum.hasMoreElements()) {
-			stream.write(enum.nextElement());
+		Enumeration en = arguments.elements();
+		while (en.hasMoreElements()) {
+			stream.write(en.nextElement());
 		}
 	}
 

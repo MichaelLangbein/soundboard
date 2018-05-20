@@ -1,15 +1,10 @@
 package org.langbein.michael.soundboard;
 
-import android.media.midi.MidiDeviceInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
-import org.langbein.michael.soundboard.sound.MidiWrapper;
-import org.langbein.michael.soundboard.sound.OscWrapper;
+import org.langbein.michael.soundboard.sound.OscWrapperThread;
 import org.langbein.michael.soundboard.views.BoardView;
-
-import java.util.ArrayList;
 
 
 /**
@@ -21,7 +16,7 @@ import java.util.ArrayList;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private OscWrapper mw;
+    private OscWrapperThread mw;
     private BoardView boardView;
 
 
@@ -29,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mw = new OscWrapper(this);
+        mw = new OscWrapperThread(this);
         boardView = new BoardView(this, mw);
         setContentView(boardView);
         boardView.startRendering();

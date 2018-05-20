@@ -4,8 +4,7 @@ import android.graphics.Canvas;
 import android.view.MotionEvent;
 
 import org.langbein.michael.soundboard.scenes.renderables.Key;
-import org.langbein.michael.soundboard.sound.MidiWrapper;
-import org.langbein.michael.soundboard.sound.OscWrapper;
+import org.langbein.michael.soundboard.sound.OscWrapperThread;
 import org.langbein.michael.soundboard.utils.GridStateMachine;
 import org.langbein.michael.soundboard.utils.MusicUtils;
 import org.langbein.michael.soundboard.utils.Vec2;
@@ -14,7 +13,7 @@ import org.langbein.michael.soundboard.utils.Vec2;
 public class BoardScene implements SceneLogic {
 
 
-    private OscWrapper sw;
+    private OscWrapperThread sw;
     private int nKeys;
     private float[] keyFrequencies;
     private Key[] keys;
@@ -24,7 +23,7 @@ public class BoardScene implements SceneLogic {
     private int height;
     private int width;
 
-    public BoardScene(OscWrapper sw) {
+    public BoardScene(OscWrapperThread sw) {
         this.sw = sw;
 
         nKeys = 49;
