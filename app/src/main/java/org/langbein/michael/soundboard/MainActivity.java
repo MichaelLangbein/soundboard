@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import org.langbein.michael.soundboard.sound.MidiWrapper;
+import org.langbein.michael.soundboard.sound.OscWrapper;
 import org.langbein.michael.soundboard.views.BoardView;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private MidiWrapper mw;
+    private OscWrapper mw;
     private BoardView boardView;
 
 
@@ -28,15 +29,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        try {
-            mw = new MidiWrapper(this);
-        } catch (Exception e) {
-            Log.e("MainActivity", e.getMessage());
-            return;
-        }
-        ArrayList<MidiDeviceInfo> infos = mw.getDeviceInfos();
-        mw.choseMidiDevice(infos.get(0), 1);
-
+        mw = new OscWrapper(this);
         boardView = new BoardView(this, mw);
         setContentView(boardView);
         boardView.startRendering();

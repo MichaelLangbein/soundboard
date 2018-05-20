@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import org.langbein.michael.soundboard.scenes.renderables.graphicsPrimitives.Hexagon;
 import org.langbein.michael.soundboard.scenes.renderables.graphicsPrimitives.Text;
 import org.langbein.michael.soundboard.sound.MidiWrapper;
+import org.langbein.michael.soundboard.sound.OscWrapper;
 
 
 public class Key implements Renderable, Touchable {
@@ -20,11 +21,11 @@ public class Key implements Renderable, Touchable {
 
     // Sound
     private float frq;
-    private MidiWrapper sound;
+    private OscWrapper sound;
 
     // State
 
-    public Key(int posX, int posY, int len, float freq, int indx, MidiWrapper sw) {
+    public Key(int posX, int posY, int len, float freq, int indx, OscWrapper sw) {
 
         // Graphics
         hex = new Hexagon(posX, posY, len);
@@ -59,7 +60,7 @@ public class Key implements Renderable, Touchable {
                 case MotionEvent.ACTION_DOWN:
                     double intensity = event.getPressure();
                     lightsOn(intensity);
-                    startPlayingNote();
+                    startPlayingNote(intensity);
                     break;
                 case MotionEvent.ACTION_UP:
                     lightsOut();
@@ -92,16 +93,16 @@ public class Key implements Renderable, Touchable {
         setFillColor(25, r, g, b);
     }
 
-    private void startPlayingNote() {
+    private void startPlayingNote(double intensity) {
         // TODO
     }
 
-    private void continuePlayingNote() {
-        sound.noteOn(1, frq, 60);
+    private void continuePlayingNote(double intensity) {
+        // TODO
     }
 
     private void stopPlayingNote() {
-        sound.noteOff(1, frq, 60);
+        sound.noteOff();
     }
 
     public double getFrequency() {
