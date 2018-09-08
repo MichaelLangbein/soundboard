@@ -1,5 +1,11 @@
 # soundboard
-a dj keyboard
+A dj keyboard. Intedned to be an external keyboard to be jacked into dj-equipment.
+
+ - can take input, performs FFT on it, uses spectrogram to highlight keys
+ - on touching keys, spectrogram is modulated
+ - new sound signal is synthesised from modulated spectrogram
+ - new signal is sent to another device via OSC
+ 
 
 Todos:
 
